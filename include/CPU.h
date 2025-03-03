@@ -221,4 +221,24 @@ private:
     void LD_H_E();     // 0x63
     void LD_H_H();     // 0x64
     void LD_H_L();     // 0x65
-}; 
+    void LD_H_HLm();   // 0x66
+    void LD_H_A();     // 0x67
+    void LD_L_B();     // 0x68
+    void LD_L_C();     // 0x69
+    void LD_L_D();     // 0x6A
+    void LD_L_E();     // 0x6B
+    void LD_L_H();     // 0x6C
+    void LD_L_L();     // 0x6D
+    void LD_L_HLm();   // 0x6E
+    void LD_L_A();     // 0x6F
+    void LD_HLm_B();   // 0x70
+    void LD_HLm_C();   // 0x71
+    void LD_HLm_D();   // 0x72
+    void LD_HLm_E();   // 0x73
+    void LD_HLm_H();   // 0x74
+    void LD_HLm_L();   // 0x75
+    void LD_HLm_A();   // 0x76
+    void LD_A_B();     // 0x77
+    void LD_A_C();     // 0x78
+    void LD_A_D();     // 0x79
+};
