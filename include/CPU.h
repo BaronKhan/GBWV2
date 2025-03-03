@@ -118,7 +118,7 @@ private:
     bool getFlag(Flags flag) const;
     void setFlag(Flags flag, bool value);
 
-    // Instructions
+    // Unprefixed Instructions
     void NOP();
     void LD_BC_n16();  // 0x01
     void LD_BC_A();    // 0x02
@@ -364,4 +364,11 @@ private:
     void EI();          // 0xFB
     void CP_n8();       // 0xFE
     void RST_38H();     // 0xFF
+
+    // CB Prefixed Instructions
+    void RLC_B();       // 0x00 (CB)
+    void RLC_C();       // 0x01 (CB)
+    void RLC_D();       // 0x02 (CB)
+    void RLC_E();       // 0x03 (CB)
+    void RLC_H();       // 0x04 (CB)
 };

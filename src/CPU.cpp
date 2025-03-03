@@ -3042,4 +3042,66 @@ void CPU::RST_38H() {
     m_cycles += 16;
 }
 
+// CB Prefixed Instructions
+
+void CPU::RLC_B() {
+    bool carry = (m_registers.b & 0x80) != 0;
+    m_registers.b = (m_registers.b << 1) | (carry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.b == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RLC_C() {
+    bool carry = (m_registers.c & 0x80) != 0;
+    m_registers.c = (m_registers.c << 1) | (carry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.c == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RLC_D() {
+    bool carry = (m_registers.d & 0x80) != 0;
+    m_registers.d = (m_registers.d << 1) | (carry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.d == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RLC_E() {
+    bool carry = (m_registers.e & 0x80) != 0;
+    m_registers.e = (m_registers.e << 1) | (carry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.e == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RLC_H() {
+    bool carry = (m_registers.h & 0x80) != 0;
+    m_registers.h = (m_registers.h << 1) | (carry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.h == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
 
