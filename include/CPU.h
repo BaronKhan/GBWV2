@@ -353,8 +353,15 @@ private:
     void RST_28H();     // 0xEF
     void LDH_A_a8();    // 0xF0
     void POP_AF();      // 0xF1
-    void LD_A_C();      // 0xF2
+    void LDH_A_C();      // 0xF2
     void DI();          // 0xF3
     void PUSH_AF();     // 0xF5
-    
+    void OR_n8();       // 0xF6
+    void RST_30H();     // 0xF7
+    void LD_HL_SP_e8(); // 0xF8
+    void LD_SP_HL();    // 0xF9
+    void LD_A_a16();    // 0xFA
+    void EI();          // 0xFB
+    void CP_n8();       // 0xFE
+    void RST_38H();     // 0xFF
 };
