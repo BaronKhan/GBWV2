@@ -271,4 +271,44 @@ private:
     void SUB_HLm();    // 0x95
     void SUB_A();      // 0x96
     void SBC_A_B();    // 0x97
+    void SBC_A_C();    // 0x98
+    void SBC_A_D();    // 0x99
+    void SBC_A_E();    // 0x9A
+    void SBC_A_H();    // 0x9B
+    void SBC_A_L();    // 0x9C
+    void SBC_A_HLm();  // 0x9D
+    void SBC_A_A();    // 0x9E
+    void AND_B();      // 0x9F
+    void AND_C();      // 0xA0
+    void AND_D();      // 0xA1
+    void AND_E();      // 0xA2
+    void AND_H();      // 0xA3
+    void AND_L();      // 0xA4
+    void AND_HLm();    // 0xA5
+    void AND_A();      // 0xA6
+    void XOR_B();      // 0xA7
+    void XOR_C();      // 0xA8
+    void XOR_D();      // 0xA9
+    void XOR_E();      // 0xAA
+    void XOR_H();      // 0xAB
+    void XOR_L();      // 0xAC
+    void XOR_HLm();    // 0xAD
+    void XOR_A();      // 0xAE
+    void OR_B();       // 0xAF
+    void OR_C();       // 0xB0
+    void OR_D();       // 0xB1
+    void OR_E();       // 0xB2
+    void OR_H();       // 0xB3
+    void OR_L();       // 0xB4
+    void OR_HLm();     // 0xB5
+    void OR_A();       // 0xB6
+    void CP_B();       // 0xB7
+    void CP_C();       // 0xB8
+    void CP_D();       // 0xB9
+    void CP_E();       // 0xBA
+    void CP_H();       // 0xBB
+    void CP_L();       // 0xBC
+    void CP_HLm();     // 0xBD
+    void CP_A();       // 0xBE
+    void RET_NZ();     // 0xBF
 };

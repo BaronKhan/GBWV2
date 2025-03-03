@@ -807,6 +807,166 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         else if (mnemonic == "SBC A,B") {
             opcodeTable[opcode] = [this]() { SBC_A_B(); };
         }
+        // Subtract C from A with carry
+        else if (mnemonic == "SBC A,C") {
+            opcodeTable[opcode] = [this]() { SBC_A_C(); };
+        }
+        // Subtract D from A with carry
+        else if (mnemonic == "SBC A,D") {
+            opcodeTable[opcode] = [this]() { SBC_A_D(); };
+        }
+        // Subtract E from A with carry
+        else if (mnemonic == "SBC A,E") {
+            opcodeTable[opcode] = [this]() { SBC_A_E(); };
+        }
+        // Subtract H from A with carry
+        else if (mnemonic == "SBC A,H") {
+            opcodeTable[opcode] = [this]() { SBC_A_H(); };
+        }
+        // Subtract L from A with carry
+        else if (mnemonic == "SBC A,L") {
+            opcodeTable[opcode] = [this]() { SBC_A_L(); };
+        }
+        // Subtract memory at HL from A with carry
+        else if (mnemonic == "SBC A,(HL)") {
+            opcodeTable[opcode] = [this]() { SBC_A_HLm(); };
+        }
+        // Subtract A from A with carry
+        else if (mnemonic == "SBC A,A") {
+            opcodeTable[opcode] = [this]() { SBC_A_A(); };
+        }
+        // AND B with A
+        else if (mnemonic == "AND B") {
+            opcodeTable[opcode] = [this]() { AND_B(); };
+        }
+        // AND C with A
+        else if (mnemonic == "AND C") {
+            opcodeTable[opcode] = [this]() { AND_C(); };
+        }
+        // AND D with A
+        else if (mnemonic == "AND D") {
+            opcodeTable[opcode] = [this]() { AND_D(); };
+        }
+        // AND E with A
+        else if (mnemonic == "AND E") {
+            opcodeTable[opcode] = [this]() { AND_E(); };
+        }
+        // AND H with A
+        else if (mnemonic == "AND H") {
+            opcodeTable[opcode] = [this]() { AND_H(); };
+        }
+        // AND L with A
+        else if (mnemonic == "AND L") {
+            opcodeTable[opcode] = [this]() { AND_L(); };
+        }
+        // AND memory at HL with A
+        else if (mnemonic == "AND (HL)") {
+            opcodeTable[opcode] = [this]() { AND_HLm(); };
+        }
+        // AND A with A
+        else if (mnemonic == "AND A") {
+            opcodeTable[opcode] = [this]() { AND_A(); };
+        }
+        // XOR B with A
+        else if (mnemonic == "XOR B") {
+            opcodeTable[opcode] = [this]() { XOR_B(); };
+        }
+        // XOR C with A
+        else if (mnemonic == "XOR C") {
+            opcodeTable[opcode] = [this]() { XOR_C(); };
+        }
+        // XOR D with A
+        else if (mnemonic == "XOR D") {
+            opcodeTable[opcode] = [this]() { XOR_D(); };
+        }
+        // XOR E with A
+        else if (mnemonic == "XOR E") {
+            opcodeTable[opcode] = [this]() { XOR_E(); };
+        }
+        // XOR H with A
+        else if (mnemonic == "XOR H") {
+            opcodeTable[opcode] = [this]() { XOR_H(); };
+        }
+        // XOR L with A
+        else if (mnemonic == "XOR L") {
+            opcodeTable[opcode] = [this]() { XOR_L(); };
+        }
+        // XOR memory at HL with A
+        else if (mnemonic == "XOR (HL)") {
+            opcodeTable[opcode] = [this]() { XOR_HLm(); };
+        }
+        // XOR A with A
+        else if (mnemonic == "XOR A") {
+            opcodeTable[opcode] = [this]() { XOR_A(); };
+        }
+        // OR B with A
+        else if (mnemonic == "OR B") {
+            opcodeTable[opcode] = [this]() { OR_B(); };
+        }
+        // OR C with A
+        else if (mnemonic == "OR C") {
+            opcodeTable[opcode] = [this]() { OR_C(); };
+        }
+        // OR D with A
+        else if (mnemonic == "OR D") {
+            opcodeTable[opcode] = [this]() { OR_D(); };
+        }
+        // OR E with A
+        else if (mnemonic == "OR E") {
+            opcodeTable[opcode] = [this]() { OR_E(); };
+        }
+        // OR H with A
+        else if (mnemonic == "OR H") {
+            opcodeTable[opcode] = [this]() { OR_H(); };
+        }
+        // OR L with A
+        else if (mnemonic == "OR L") {
+            opcodeTable[opcode] = [this]() { OR_L(); };
+        }
+        // OR memory at HL with A
+        else if (mnemonic == "OR (HL)") {
+            opcodeTable[opcode] = [this]() { OR_HLm(); };
+        }
+        // OR A with A
+        else if (mnemonic == "OR A") {
+            opcodeTable[opcode] = [this]() { OR_A(); };
+        }
+        // Compare B with A
+        else if (mnemonic == "CP B") {
+            opcodeTable[opcode] = [this]() { CP_B(); };
+        }
+        // Compare C with A
+        else if (mnemonic == "CP C") {
+            opcodeTable[opcode] = [this]() { CP_C(); };
+        }
+        // Compare D with A
+        else if (mnemonic == "CP D") {
+            opcodeTable[opcode] = [this]() { CP_D(); };
+        }
+        // Compare E with A
+        else if (mnemonic == "CP E") {
+            opcodeTable[opcode] = [this]() { CP_E(); };
+        }
+        // Compare H with A
+        else if (mnemonic == "CP H") {
+            opcodeTable[opcode] = [this]() { CP_H(); };
+        }
+        // Compare L with A
+        else if (mnemonic == "CP L") {
+            opcodeTable[opcode] = [this]() { CP_L(); };
+        }
+        // Compare memory at HL with A
+        else if (mnemonic == "CP (HL)") {
+            opcodeTable[opcode] = [this]() { CP_HLm(); };
+        }
+        // Compare A with A
+        else if (mnemonic == "CP A") {
+            opcodeTable[opcode] = [this]() { CP_A(); };
+        }
+        // Return if not zero
+        else if (mnemonic == "RET NZ") {
+            opcodeTable[opcode] = [this]() { RET_NZ(); };
+        }
         else {
             std::cerr << "Unknown mnemonic: " << mnemonic << std::endl;
         }
@@ -1999,4 +2159,380 @@ void CPU::SBC_A_B() {
     setFlag(FLAG_C, m_registers.a < m_registers.b + carry);
     m_registers.a = result;
     m_cycles += 4;
+}
+
+void CPU::SBC_A_C() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.c - carry;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.c & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.c + carry);
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_D() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.d - carry;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.d & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.d + carry);
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_E() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.e - carry;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.e & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.e + carry);
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_H() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.h - carry;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.h & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.h + carry);
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_L() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.l - carry;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.l & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.l + carry);
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_HLm() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 value = m_memory.read(m_registers.hl);
+    u8 result = m_registers.a - value - carry;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < value + carry);
+    m_registers.a = result;
+    m_cycles += 8;
+}
+
+void CPU::SBC_A_A() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.a - carry;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, carry);
+    setFlag(FLAG_C, carry);
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::AND_B() {
+    m_registers.a &= m_registers.b;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::AND_C() {
+    m_registers.a &= m_registers.c;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::AND_D() {
+    m_registers.a &= m_registers.d;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::AND_E() {
+    m_registers.a &= m_registers.e;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::AND_H() {
+    m_registers.a &= m_registers.h;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::AND_L() {
+    m_registers.a &= m_registers.l;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::AND_HLm() {
+    m_registers.a &= m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    m_cycles += 8;
+}
+
+void CPU::AND_A() {
+    // AND A with itself - result is the same as A
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::XOR_B() {
+    m_registers.a ^= m_registers.b;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::XOR_C() {
+    m_registers.a ^= m_registers.c;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::XOR_D() {
+    m_registers.a ^= m_registers.d;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::XOR_E() {
+    m_registers.a ^= m_registers.e;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::XOR_H() {
+    m_registers.a ^= m_registers.h;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::XOR_L() {
+    m_registers.a ^= m_registers.l;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::XOR_HLm() {
+    m_registers.a ^= m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 8;
+}
+
+void CPU::XOR_A() {
+    m_registers.a = 0;  // XOR with itself always gives 0
+    setFlag(FLAG_Z, true);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::OR_B() {
+    m_registers.a |= m_registers.b;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::OR_C() {
+    m_registers.a |= m_registers.c;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::OR_D() {
+    m_registers.a |= m_registers.d;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::OR_E() {
+    m_registers.a |= m_registers.e;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::OR_H() {
+    m_registers.a |= m_registers.h;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::OR_L() {
+    m_registers.a |= m_registers.l;
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::OR_HLm() {
+    m_registers.a |= m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 8;
+}
+
+void CPU::OR_A() {
+    // OR A with itself - result is the same as A
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::CP_B() {
+    u8 result = m_registers.a - m_registers.b;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.b & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.b);
+    m_cycles += 4;
+}
+
+void CPU::CP_C() {
+    u8 result = m_registers.a - m_registers.c;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.c & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.c);
+    m_cycles += 4;
+}
+
+void CPU::CP_D() {
+    u8 result = m_registers.a - m_registers.d;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.d & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.d);
+    m_cycles += 4;
+}
+
+void CPU::CP_E() {
+    u8 result = m_registers.a - m_registers.e;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.e & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.e);
+    m_cycles += 4;
+}
+
+void CPU::CP_H() {
+    u8 result = m_registers.a - m_registers.h;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.h & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.h);
+    m_cycles += 4;
+}
+
+void CPU::CP_L() {
+    u8 result = m_registers.a - m_registers.l;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.l & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.l);
+    m_cycles += 4;
+}
+
+void CPU::CP_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    u8 result = m_registers.a - value;
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F));
+    setFlag(FLAG_C, m_registers.a < value);
+    m_cycles += 8;
+}
+
+void CPU::CP_A() {
+    // Compare A with itself - always sets Z flag and N flag
+    setFlag(FLAG_Z, true);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    m_cycles += 4;
+}
+
+void CPU::RET_NZ() {
+    if (!getFlag(FLAG_Z)) {
+        m_registers.pc = pop();
+        m_cycles += 20;
+    } else {
+        m_cycles += 8;
+    }
 }
