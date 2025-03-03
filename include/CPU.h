@@ -210,4 +210,15 @@ private:
     void LD_E_B();     // 0x58
     void LD_E_C();     // 0x59
     void LD_E_D();     // 0x5A
+    void LD_E_E();     // 0x5B
+    void LD_E_H();     // 0x5C
+    void LD_E_L();     // 0x5D
+    void LD_E_HLm();   // 0x5E
+    void LD_E_A();     // 0x5F
+    void LD_H_B();     // 0x60
+    void LD_H_C();     // 0x61
+    void LD_H_D();     // 0x62
+    void LD_H_E();     // 0x63
+    void LD_H_H();     // 0x64
+    void LD_H_L();     // 0x65
 }; 
