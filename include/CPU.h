@@ -155,4 +155,14 @@ private:
     void LD_HL_n16();  // 0x21
     void LD_HLI_A();   // 0x22
     void INC_HL();     // 0x23
+    void INC_H();      // 0x24
+    void DEC_H();      // 0x25
+    void LD_H_n8();    // 0x26
+    void DAA();        // 0x27
+    void JR_Z_e8();    // 0x28
+    void ADD_HL_HL();  // 0x29
+    void LD_A_HLI();   // 0x2A
+    void DEC_HL();     // 0x2B
+    void INC_L();      // 0x2C
+    void DEC_L();      // 0x2D
 }; 

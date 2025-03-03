@@ -20,6 +20,7 @@ using u32 = uint32_t;
 using i8 = int8_t;
 using i16 = int16_t;
 using i32 = int32_t;
+using s8 = i8;  // Signed 8-bit type for relative jumps
 
 // Constants
 constexpr u16 ROM_BANK_SIZE = 0x4000;  // 16KB
