@@ -238,5 +238,26 @@ private:
     void LD_HLm_H();   // 0x74
     void LD_HLm_L();   // 0x75
     void HALT();       // 0x76
+    void LD_HLm_A();    // 0x77
+    void LD_A_B();      // 0x78
+    void LD_A_C();      // 0x79
+    void LD_A_D();      // 0x7A
+    void LD_A_E();      // 0x7B
+    void LD_A_H();      // 0x7C
+    void LD_A_L();      // 0x7D
+    void LD_A_HLm();    // 0x7E
+    void LD_A_A();      // 0x7F
+    void ADD_A_B();     // 0x80
+    void ADD_A_C();     // 0x81
+    void ADD_A_D();     // 0x82
+    void ADD_A_E();     // 0x83
+    void ADD_A_H();     // 0x84
+    void ADD_A_L();     // 0x85
+    void ADD_A_HLm();   // 0x86
+    void ADD_A_A();     // 0x87
+    void ADC_A_B();     // 0x88
+    void ADC_A_C();     // 0x89
+    void ADC_A_D();     // 0x8A
+    void ADC_A_E();     // 0x8B
     
 };

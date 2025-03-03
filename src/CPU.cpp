@@ -1131,6 +1131,90 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         else if (mnemonic == "HALT") {
             opcodeTable[opcode] = [this]() { HALT(); };
         }
+        // Load A into memory at HL
+        else if (mnemonic == "LD (HL),A") {
+            opcodeTable[opcode] = [this]() { LD_HLm_A(); };
+        }
+        // Load B into A (0x78)
+        else if (mnemonic == "LD A,B") {
+            opcodeTable[opcode] = [this]() { LD_A_B(); };
+        }
+        // Load C into A (0x79)
+        else if (mnemonic == "LD A,C") {
+            opcodeTable[opcode] = [this]() { LD_A_C(); };
+        }
+        // Load D into A (0x7A)
+        else if (mnemonic == "LD A,D") {
+            opcodeTable[opcode] = [this]() { LD_A_D(); };
+        }
+        // Load E into A (0x7B)
+        else if (mnemonic == "LD A,E") {
+            opcodeTable[opcode] = [this]() { LD_A_E(); };
+        }
+        // Load H into A (0x7C)
+        else if (mnemonic == "LD A,H") {
+            opcodeTable[opcode] = [this]() { LD_A_H(); };
+        }
+        // Load L into A (0x7D)
+        else if (mnemonic == "LD A,L") {
+            opcodeTable[opcode] = [this]() { LD_A_L(); };
+        }
+        // Load memory at HL into A (0x7E)
+        else if (mnemonic == "LD A,(HL)") {
+            opcodeTable[opcode] = [this]() { LD_A_HLm(); };
+        }
+        // Load A into A (0x7F)
+        else if (mnemonic == "LD A,A") {
+            opcodeTable[opcode] = [this]() { LD_A_A(); };
+        }
+        // Add B to A (0x80)
+        else if (mnemonic == "ADD A,B") {
+            opcodeTable[opcode] = [this]() { ADD_A_B(); };
+        }
+        // Add C to A (0x81)
+        else if (mnemonic == "ADD A,C") {
+            opcodeTable[opcode] = [this]() { ADD_A_C(); };
+        }
+        // Add D to A (0x82)
+        else if (mnemonic == "ADD A,D") {
+            opcodeTable[opcode] = [this]() { ADD_A_D(); };
+        }
+        // Add E to A (0x83)
+        else if (mnemonic == "ADD A,E") {
+            opcodeTable[opcode] = [this]() { ADD_A_E(); };
+        }
+        // Add H to A (0x84)
+        else if (mnemonic == "ADD A,H") {
+            opcodeTable[opcode] = [this]() { ADD_A_H(); };
+        }
+        // Add L to A (0x85)
+        else if (mnemonic == "ADD A,L") {
+            opcodeTable[opcode] = [this]() { ADD_A_L(); };
+        }
+        // Add memory at HL to A (0x86)
+        else if (mnemonic == "ADD A,(HL)") {
+            opcodeTable[opcode] = [this]() { ADD_A_HLm(); };
+        }
+        // Add A to A (0x87)
+        else if (mnemonic == "ADD A,A") {
+            opcodeTable[opcode] = [this]() { ADD_A_A(); };
+        }
+        // Add B to A with carry (0x88)
+        else if (mnemonic == "ADC A,B") {
+            opcodeTable[opcode] = [this]() { ADC_A_B(); };
+        }
+        // Add C to A with carry (0x89)
+        else if (mnemonic == "ADC A,C") {
+            opcodeTable[opcode] = [this]() { ADC_A_C(); };
+        }
+        // Add D to A with carry (0x8A)
+        else if (mnemonic == "ADC A,D") {
+            opcodeTable[opcode] = [this]() { ADC_A_D(); };
+        }
+        // Add E to A with carry (0x8B)
+        else if (mnemonic == "ADC A,E") {
+            opcodeTable[opcode] = [this]() { ADC_A_E(); };
+        }
         else {
             std::cerr << "Unknown mnemonic: " << mnemonic << std::endl;
         }
@@ -2019,6 +2103,196 @@ void CPU::LD_HLm_L() {
 
 void CPU::HALT() {
     m_halted = true;
+    m_cycles += 4;
+}
+
+void CPU::LD_HLm_A() {
+    m_memory.write(m_registers.hl, m_registers.a);
+    m_cycles += 8;
+}
+
+void CPU::LD_A_B() {
+    m_registers.a = m_registers.b;
+    m_cycles += 4;
+}
+
+void CPU::LD_A_C() {
+    m_registers.a = m_registers.c;
+    m_cycles += 4;
+}
+
+void CPU::LD_A_D() {
+    m_registers.a = m_registers.d;
+    m_cycles += 4;
+}
+
+void CPU::LD_A_E() {
+    m_registers.a = m_registers.e;
+    m_cycles += 4;
+}
+
+void CPU::LD_A_H() {
+    m_registers.a = m_registers.h;
+    m_cycles += 4;
+}
+
+void CPU::LD_A_L() {
+    m_registers.a = m_registers.l;
+    m_cycles += 4;
+}
+
+void CPU::LD_A_HLm() {
+    m_registers.a = m_memory.read(m_registers.hl);
+    m_cycles += 8;
+}
+
+void CPU::LD_A_A() {
+    // No operation needed - loading A into itself
+    m_cycles += 4;
+}
+
+void CPU::ADD_A_B() {
+    u16 result = m_registers.a + m_registers.b;
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.b & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADD_A_C() {
+    u16 result = m_registers.a + m_registers.c;
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.c & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADD_A_D() {
+    u16 result = m_registers.a + m_registers.d;
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.d & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADD_A_E() {
+    u16 result = m_registers.a + m_registers.e;
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.e & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADD_A_H() {
+    u16 result = m_registers.a + m_registers.h;
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.h & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADD_A_L() {
+    u16 result = m_registers.a + m_registers.l;
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.l & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADD_A_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    u16 result = m_registers.a + value;
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 8;
+}
+
+void CPU::ADD_A_A() {
+    u16 result = m_registers.a + m_registers.a;
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.a & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADC_A_B() {
+    u16 result = m_registers.a + m_registers.b + (getFlag(FLAG_C) ? 1 : 0);
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.b & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADC_A_C() {
+    u16 result = m_registers.a + m_registers.c + (getFlag(FLAG_C) ? 1 : 0);
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.c & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADC_A_D() {
+    u16 result = m_registers.a + m_registers.d + (getFlag(FLAG_C) ? 1 : 0);
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.d & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADC_A_E() {
+    u16 result = m_registers.a + m_registers.e + (getFlag(FLAG_C) ? 1 : 0);
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.e & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
     m_cycles += 4;
 }
 
