@@ -146,13 +146,21 @@ bool Emulator::initializeWebView2() {
                     m_webViewEnvironment = environment;
                     
                     // Create WebView2 controller
-                    m_webViewEnvironment->CreateCoreWebView2Controller(m_hwnd,
+                    auto hr = m_webViewEnvironment->CreateCoreWebView2Controller(m_hwnd,
                         Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                             [this](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
                                 return OnCreateWebView2ControlCompleted(result, controller);
                             }).Get());
+
+                    if (FAILED(hr)) {
+                        std::cerr << "Failed to create WebView2 controller" << std::endl;
+                        return hr;
+                    }
                 }
-                return S_OK;
+                else {
+                    std::cerr << "Failed to create WebView2 environment" << std::endl;
+                }
+                return result;
             }).Get());
     
     if (FAILED(hr)) {
@@ -179,6 +187,9 @@ HRESULT Emulator::OnCreateWebView2ControlCompleted(HRESULT result, ICoreWebView2
                     return OnWebMessageReceived(sender, args);
                 }).Get(), nullptr);
         
+        // Make the WebView visible
+        m_webViewController->put_IsVisible(TRUE);
+        
         // Resize WebView
         resizeWebView();
         
@@ -195,7 +206,11 @@ HRESULT Emulator::OnCreateWebView2ControlCompleted(HRESULT result, ICoreWebView2
 HRESULT Emulator::OnWebMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args) {
     // Get message
     LPWSTR message;
-    args->TryGetWebMessageAsString(&message);
+    auto hr = args->TryGetWebMessageAsString(&message);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to get WebView message" << std::endl;
+        return hr;
+    }
     
     // Convert to string
     std::wstring wstr(message);

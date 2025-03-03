@@ -76,6 +76,12 @@ bool MainWindow::create(HINSTANCE hInstance, int nCmdShow) {
     if (m_hwnd == nullptr) {
         return false;
     }
+
+    Emulator::getInstance().initialize(m_hwnd);
+    onFileOpen();
+    if (Emulator::getInstance().isPaused()) {
+        Emulator::getInstance().togglePause();
+    }
     
     // Create menu
     // HMENU hMenu = CreateMenu();
@@ -109,6 +115,8 @@ int MainWindow::messageLoop() {
     while (GetMessage(&msg, nullptr, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
+
+        Emulator::getInstance().run();
     }
     
     return (int)msg.wParam;
@@ -247,15 +255,7 @@ LRESULT MainWindow::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
 }
 
 // On create
-void MainWindow::onCreate() {
-    // Initialize emulator
-    Emulator::getInstance().initialize(m_hwnd);
-    onFileOpen();
-    if (Emulator::getInstance().isPaused()) {
-        Emulator::getInstance().togglePause();
-    }
-
-    
+void MainWindow::onCreate() { 
 }
 
 // On destroy
