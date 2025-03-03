@@ -241,4 +241,14 @@ private:
     void LD_A_B();     // 0x77
     void LD_A_C();     // 0x78
     void LD_A_D();     // 0x79
+    void LD_A_E();     // 0x7A
+    void LD_A_H();     // 0x7B
+    void LD_A_L();     // 0x7C
+    void LD_A_HLm();   // 0x7D
+    void LD_A_A();     // 0x7E
+    void ADD_A_B();    // 0x7F
+    void ADD_A_C();    // 0x80
+    void ADD_A_D();    // 0x81
+    void ADD_A_E();    // 0x82
+    void ADD_A_H();    // 0x83
 };
