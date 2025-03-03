@@ -207,645 +207,205 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         if (mnemonic == "NOP") {
             opcodeTable[opcode] = [this]() { NOP(); };
         }
-        // Load immediate 16-bit value into BC
+        // LD instructions
         else if (mnemonic == "LD BC,n16") {
             opcodeTable[opcode] = [this]() { LD_BC_n16(); };
         }
-        // Load A into memory pointed by BC
-        else if (mnemonic == "LD (BC),A") {
+        else if (mnemonic == "LD BC,A") {
             opcodeTable[opcode] = [this]() { LD_BC_A(); };
         }
-        // Increment BC
-        else if (mnemonic == "INC BC") {
-            opcodeTable[opcode] = [this]() { INC_BC(); };
-        }
-        // Increment B
-        else if (mnemonic == "INC B") {
-            opcodeTable[opcode] = [this]() { INC_B(); };
-        }
-        // Decrement B
-        else if (mnemonic == "DEC B") {
-            opcodeTable[opcode] = [this]() { DEC_B(); };
-        }
-        // Load immediate 8-bit value into B
         else if (mnemonic == "LD B,n8") {
             opcodeTable[opcode] = [this]() { LD_B_n8(); };
         }
-        // Rotate A left
-        else if (mnemonic == "RLCA") {
-            opcodeTable[opcode] = [this]() { RLCA(); };
-        }
-        // Load SP into memory
-        else if (mnemonic == "LD (a16),SP") {
+        else if (mnemonic == "LD a16,SP") {
             opcodeTable[opcode] = [this]() { LD_a16_SP(); };
         }
-        // Add BC to HL
-        else if (mnemonic == "ADD HL,BC") {
-            opcodeTable[opcode] = [this]() { ADD_HL_BC(); };
-        }
-        // Load from BC into A
-        else if (mnemonic == "LD A,(BC)") {
+        else if (mnemonic == "LD A,BC") {
             opcodeTable[opcode] = [this]() { LD_A_BC(); };
         }
-        // Decrement BC
-        else if (mnemonic == "DEC BC") {
-            opcodeTable[opcode] = [this]() { DEC_BC(); };
-        }
-        // Increment C
-        else if (mnemonic == "INC C") {
-            opcodeTable[opcode] = [this]() { INC_C(); };
-        }
-        // Decrement C
-        else if (mnemonic == "DEC C") {
-            opcodeTable[opcode] = [this]() { DEC_C(); };
-        }
-        // Load immediate into C
         else if (mnemonic == "LD C,n8") {
             opcodeTable[opcode] = [this]() { LD_C_n8(); };
         }
-        // Rotate A right
-        else if (mnemonic == "RRCA") {
-            opcodeTable[opcode] = [this]() { RRCA(); };
-        }
-        // Stop
-        else if (mnemonic == "STOP") {
-            opcodeTable[opcode] = [this]() { STOP(); };
-        }
-        // Load immediate into DE
         else if (mnemonic == "LD DE,n16") {
             opcodeTable[opcode] = [this]() { LD_DE_n16(); };
         }
-        // Load A into DE memory
-        else if (mnemonic == "LD (DE),A") {
+        else if (mnemonic == "LD DE,A") {
             opcodeTable[opcode] = [this]() { LD_DE_A(); };
         }
-        // Increment DE
-        else if (mnemonic == "INC DE") {
-            opcodeTable[opcode] = [this]() { INC_DE(); };
-        }
-        // Increment D
-        else if (mnemonic == "INC D") {
-            opcodeTable[opcode] = [this]() { INC_D(); };
-        }
-        // Decrement D
-        else if (mnemonic == "DEC D") {
-            opcodeTable[opcode] = [this]() { DEC_D(); };
-        }
-        // Load immediate into D
         else if (mnemonic == "LD D,n8") {
             opcodeTable[opcode] = [this]() { LD_D_n8(); };
         }
-        // Rotate A left through carry
-        else if (mnemonic == "RLA") {
-            opcodeTable[opcode] = [this]() { RLA(); };
-        }
-        // Relative jump
-        else if (mnemonic == "JR e8") {
-            opcodeTable[opcode] = [this]() { JR_e8(); };
-        }
-        // Add DE to HL
-        else if (mnemonic == "ADD HL,DE") {
-            opcodeTable[opcode] = [this]() { ADD_HL_DE(); };
-        }
-        // Load from DE into A
-        else if (mnemonic == "LD A,(DE)") {
+        else if (mnemonic == "LD A,DE") {
             opcodeTable[opcode] = [this]() { LD_A_DE(); };
         }
-        // Decrement DE
-        else if (mnemonic == "DEC DE") {
-            opcodeTable[opcode] = [this]() { DEC_DE(); };
-        }
-        // Increment E
-        else if (mnemonic == "INC E") {
-            opcodeTable[opcode] = [this]() { INC_E(); };
-        }
-        // Decrement E
-        else if (mnemonic == "DEC E") {
-            opcodeTable[opcode] = [this]() { DEC_E(); };
-        }
-        // Load immediate into E
         else if (mnemonic == "LD E,n8") {
             opcodeTable[opcode] = [this]() { LD_E_n8(); };
         }
-        // Rotate A right through carry
-        else if (mnemonic == "RRA") {
-            opcodeTable[opcode] = [this]() { RRA(); };
-        }
-        // Jump if not zero
-        else if (mnemonic == "JR NZ,e8") {
-            opcodeTable[opcode] = [this]() { JR_NZ_e8(); };
-        }
-        // Load immediate into HL
         else if (mnemonic == "LD HL,n16") {
             opcodeTable[opcode] = [this]() { LD_HL_n16(); };
         }
-        // Load A into HL and increment
-        else if (mnemonic == "LD (HL+),A") {
+        else if (mnemonic == "LD HL+,A") {
             opcodeTable[opcode] = [this]() { LD_HLI_A(); };
         }
-        // Increment HL
-        else if (mnemonic == "INC HL") {
-            opcodeTable[opcode] = [this]() { INC_HL(); };
-        }
-        // Increment H
-        else if (mnemonic == "INC H") {
-            opcodeTable[opcode] = [this]() { INC_H(); };
-        }
-        // Decrement H
-        else if (mnemonic == "DEC H") {
-            opcodeTable[opcode] = [this]() { DEC_H(); };
-        }
-        // Load immediate into H
         else if (mnemonic == "LD H,n8") {
             opcodeTable[opcode] = [this]() { LD_H_n8(); };
         }
-        // Decimal adjust A
-        else if (mnemonic == "DAA") {
-            opcodeTable[opcode] = [this]() { DAA(); };
-        }
-        // Jump if zero
-        else if (mnemonic == "JR Z,e8") {
-            opcodeTable[opcode] = [this]() { JR_Z_e8(); };
-        }
-        // Add HL to HL
-        else if (mnemonic == "ADD HL,HL") {
-            opcodeTable[opcode] = [this]() { ADD_HL_HL(); };
-        }
-        // Load from HL and increment
-        else if (mnemonic == "LD A,(HL+)") {
+        else if (mnemonic == "LD A,HL+") {
             opcodeTable[opcode] = [this]() { LD_A_HLI(); };
         }
-        // Decrement HL
-        else if (mnemonic == "DEC HL") {
-            opcodeTable[opcode] = [this]() { DEC_HL(); };
-        }
-        // Increment L
-        else if (mnemonic == "INC L") {
-            opcodeTable[opcode] = [this]() { INC_L(); };
-        }
-        // Decrement L
-        else if (mnemonic == "DEC L") {
-            opcodeTable[opcode] = [this]() { DEC_L(); };
-        }
-        // Load immediate into L
         else if (mnemonic == "LD L,n8") {
             opcodeTable[opcode] = [this]() { LD_L_n8(); };
         }
-        // Complement A
-        else if (mnemonic == "CPL") {
-            opcodeTable[opcode] = [this]() { CPL(); };
-        }
-        // Jump if no carry
-        else if (mnemonic == "JR NC,e8") {
-            opcodeTable[opcode] = [this]() { JR_NC_e8(); };
-        }
-        // Load immediate into SP
         else if (mnemonic == "LD SP,n16") {
             opcodeTable[opcode] = [this]() { LD_SP_n16(); };
         }
-        // Load A into HL and decrement
-        else if (mnemonic == "LD (HL-),A") {
+        else if (mnemonic == "LD HL-,A") {
             opcodeTable[opcode] = [this]() { LD_HLD_A(); };
         }
-        // Increment SP
-        else if (mnemonic == "INC SP") {
-            opcodeTable[opcode] = [this]() { INC_SP(); };
-        }
-        // Increment memory at HL
-        else if (mnemonic == "INC (HL)") {
-            opcodeTable[opcode] = [this]() { INC_HLm(); };
-        }
-        // Decrement memory at HL
-        else if (mnemonic == "DEC (HL)") {
-            opcodeTable[opcode] = [this]() { DEC_HLm(); };
-        }
-        // Load immediate into memory at HL
-        else if (mnemonic == "LD (HL),n8") {
+        else if (mnemonic == "LD HL,n8") {
             opcodeTable[opcode] = [this]() { LD_HL_n8(); };
         }
-        // Set carry flag
-        else if (mnemonic == "SCF") {
-            opcodeTable[opcode] = [this]() { SCF(); };
-        }
-        // Jump if carry
-        else if (mnemonic == "JR C,e8") {
-            opcodeTable[opcode] = [this]() { JR_C_e8(); };
-        }
-        // Add SP to HL
-        else if (mnemonic == "ADD HL,SP") {
-            opcodeTable[opcode] = [this]() { ADD_HL_SP(); };
-        }
-        // Load from HL and decrement into A
-        else if (mnemonic == "LD A,(HL-)") {
+        else if (mnemonic == "LD A,HL-") {
             opcodeTable[opcode] = [this]() { LD_A_HLD(); };
         }
-        // Decrement SP
-        else if (mnemonic == "DEC SP") {
-            opcodeTable[opcode] = [this]() { DEC_SP(); };
-        }
-        // Increment A
-        else if (mnemonic == "INC A") {
-            opcodeTable[opcode] = [this]() { INC_A(); };
-        }
-        // Decrement A
-        else if (mnemonic == "DEC A") {
-            opcodeTable[opcode] = [this]() { DEC_A(); };
-        }
-        // Load immediate into A
         else if (mnemonic == "LD A,n8") {
             opcodeTable[opcode] = [this]() { LD_A_n8(); };
         }
-        // Load B into B
-        else if (mnemonic == "LD B,B") {
-            opcodeTable[opcode] = [this]() { LD_B_B(); };
-        }
-        // Load C into B
-        else if (mnemonic == "LD B,C") {
-            opcodeTable[opcode] = [this]() { LD_B_C(); };
-        }
-        // Load D into B
-        else if (mnemonic == "LD B,D") {
-            opcodeTable[opcode] = [this]() { LD_B_D(); };
-        }
-        // Load E into B
-        else if (mnemonic == "LD B,E") {
-            opcodeTable[opcode] = [this]() { LD_B_E(); };
-        }
-        // Load H into B
-        else if (mnemonic == "LD B,H") {
-            opcodeTable[opcode] = [this]() { LD_B_H(); };
-        }
-        // Load L into B
-        else if (mnemonic == "LD B,L") {
-            opcodeTable[opcode] = [this]() { LD_B_L(); };
-        }
-        // Load memory at HL into B
-        else if (mnemonic == "LD B,(HL)") {
-            opcodeTable[opcode] = [this]() { LD_B_HLm(); };
-        }
-        // Load A into B
-        else if (mnemonic == "LD B,A") {
-            opcodeTable[opcode] = [this]() { LD_B_A(); };
-        }
-        // Load B into C
-        else if (mnemonic == "LD C,B") {
-            opcodeTable[opcode] = [this]() { LD_C_B(); };
-        }
-        // Load C into C
-        else if (mnemonic == "LD C,C") {
-            opcodeTable[opcode] = [this]() { LD_C_C(); };
-        }
-        // Load D into C
-        else if (mnemonic == "LD C,D") {
-            opcodeTable[opcode] = [this]() { LD_C_D(); };
-        }
-        // Load E into C
-        else if (mnemonic == "LD C,E") {
-            opcodeTable[opcode] = [this]() { LD_C_E(); };
-        }
-        // Load H into C
-        else if (mnemonic == "LD C,H") {
-            opcodeTable[opcode] = [this]() { LD_C_H(); };
-        }
-        // Load L into C
-        else if (mnemonic == "LD C,L") {
-            opcodeTable[opcode] = [this]() { LD_C_L(); };
-        }
-        // Load memory at HL into C
-        else if (mnemonic == "LD C,(HL)") {
-            opcodeTable[opcode] = [this]() { LD_C_HLm(); };
-        }
-        // Load A into C
-        else if (mnemonic == "LD C,A") {
-            opcodeTable[opcode] = [this]() { LD_C_A(); };
-        }
-        // Load B into D
-        else if (mnemonic == "LD D,B") {
-            opcodeTable[opcode] = [this]() { LD_D_B(); };
-        }
-        // Load C into D
-        else if (mnemonic == "LD D,C") {
-            opcodeTable[opcode] = [this]() { LD_D_C(); };
-        }
-        // Load D into D
-        else if (mnemonic == "LD D,D") {
-            opcodeTable[opcode] = [this]() { LD_D_D(); };
-        }
-        // Load E into D
-        else if (mnemonic == "LD D,E") {
-            opcodeTable[opcode] = [this]() { LD_D_E(); };
-        }
-        // Load H into D
-        else if (mnemonic == "LD D,H") {
-            opcodeTable[opcode] = [this]() { LD_D_H(); };
-        }
-        // Load L into D
-        else if (mnemonic == "LD D,L") {
-            opcodeTable[opcode] = [this]() { LD_D_L(); };
-        }
-        // Load memory at HL into D
-        else if (mnemonic == "LD D,(HL)") {
-            opcodeTable[opcode] = [this]() { LD_D_HLm(); };
-        }
-        // Load A into D
-        else if (mnemonic == "LD D,A") {
-            opcodeTable[opcode] = [this]() { LD_D_A(); };
-        }
-        // Load B into E
-        else if (mnemonic == "LD E,B") {
-            opcodeTable[opcode] = [this]() { LD_E_B(); };
-        }
-        // Load C into E
-        else if (mnemonic == "LD E,C") {
-            opcodeTable[opcode] = [this]() { LD_E_C(); };
-        }
-        // Load D into E
-        else if (mnemonic == "LD E,D") {
-            opcodeTable[opcode] = [this]() { LD_E_D(); };
-        }
-        // Load E into E
-        else if (mnemonic == "LD E,E") {
-            opcodeTable[opcode] = [this]() { LD_E_E(); };
-        }
-        // Load H into E
-        else if (mnemonic == "LD E,H") {
-            opcodeTable[opcode] = [this]() { LD_E_H(); };
-        }
-        // Load L into E
-        else if (mnemonic == "LD E,L") {
-            opcodeTable[opcode] = [this]() { LD_E_L(); };
-        }
-        // Load memory at HL into E
-        else if (mnemonic == "LD E,(HL)") {
-            opcodeTable[opcode] = [this]() { LD_E_HLm(); };
-        }
-        // Load A into E
-        else if (mnemonic == "LD E,A") {
-            opcodeTable[opcode] = [this]() { LD_E_A(); };
-        }
-        // Load B into H
-        else if (mnemonic == "LD H,B") {
-            opcodeTable[opcode] = [this]() { LD_H_B(); };
-        }
-        // Load C into H
-        else if (mnemonic == "LD H,C") {
-            opcodeTable[opcode] = [this]() { LD_H_C(); };
-        }
-        // Load D into H
-        else if (mnemonic == "LD H,D") {
-            opcodeTable[opcode] = [this]() { LD_H_D(); };
-        }
-        // Load E into H
-        else if (mnemonic == "LD H,E") {
-            opcodeTable[opcode] = [this]() { LD_H_E(); };
-        }
-        // Load H into H
-        else if (mnemonic == "LD H,H") {
-            opcodeTable[opcode] = [this]() { LD_H_H(); };
-        }
-        // Load L into H
-        else if (mnemonic == "LD H,L") {
-            opcodeTable[opcode] = [this]() { LD_H_L(); };
-        }
-        // Load memory at HL into H
-        else if (mnemonic == "LD H,(HL)") {
-            opcodeTable[opcode] = [this]() { LD_H_HLm(); };
-        }
-        // Load A into H
-        else if (mnemonic == "LD H,A") {
-            opcodeTable[opcode] = [this]() { LD_H_A(); };
-        }
-        // Load B into L
-        else if (mnemonic == "LD L,B") {
-            opcodeTable[opcode] = [this]() { LD_L_B(); };
-        }
-        // Load C into L
-        else if (mnemonic == "LD L,C") {
-            opcodeTable[opcode] = [this]() { LD_L_C(); };
-        }
-        // Load D into L
-        else if (mnemonic == "LD L,D") {
-            opcodeTable[opcode] = [this]() { LD_L_D(); };
-        }
-        // Load E into L
-        else if (mnemonic == "LD L,E") {
-            opcodeTable[opcode] = [this]() { LD_L_E(); };
-        }
-        // Load H into L
-        else if (mnemonic == "LD L,H") {
-            opcodeTable[opcode] = [this]() { LD_L_H(); };
-        }
-        // Load L into L
-        else if (mnemonic == "LD L,L") {
-            opcodeTable[opcode] = [this]() { LD_L_L(); };
-        }
-        // Load memory at HL into L
-        else if (mnemonic == "LD L,(HL)") {
-            opcodeTable[opcode] = [this]() { LD_L_HLm(); };
-        }
-        // Load A into L
-        else if (mnemonic == "LD L,A") {
-            opcodeTable[opcode] = [this]() { LD_L_A(); };
-        }
-        // Load B into memory at HL
-        else if (mnemonic == "LD (HL),B") {
-            opcodeTable[opcode] = [this]() { LD_HLm_B(); };
-        }
-        // Load C into memory at HL
-        else if (mnemonic == "LD (HL),C") {
-            opcodeTable[opcode] = [this]() { LD_HLm_C(); };
-        }
-        // Load D into memory at HL
-        else if (mnemonic == "LD (HL),D") {
-            opcodeTable[opcode] = [this]() { LD_HLm_D(); };
-        }
-        // Load E into memory at HL
-        else if (mnemonic == "LD (HL),E") {
-            opcodeTable[opcode] = [this]() { LD_HLm_E(); };
-        }
-        // Load H into memory at HL
-        else if (mnemonic == "LD (HL),H") {
-            opcodeTable[opcode] = [this]() { LD_HLm_H(); };
-        }
-        // Load L into memory at HL
-        else if (mnemonic == "LD (HL),L") {
-            opcodeTable[opcode] = [this]() { LD_HLm_L(); };
-        }
-        // Load A into memory at HL
-        else if (mnemonic == "LD (HL),A") {
-            opcodeTable[opcode] = [this]() { LD_HLm_A(); };
-        }
-        // Load B into A
-        else if (mnemonic == "LD A,B") {
-            opcodeTable[opcode] = [this]() { LD_A_B(); };
-        }
-        // Load C into A
-        else if (mnemonic == "LD A,C") {
-            opcodeTable[opcode] = [this]() { LD_A_C(); };
-        }
-        // Load D into A
-        else if (mnemonic == "LD A,D") {
-            opcodeTable[opcode] = [this]() { LD_A_D(); };
-        }
-        // Load E into A
-        else if (mnemonic == "LD A,E") {
-            opcodeTable[opcode] = [this]() { LD_A_E(); };
-        }
-        // Load H into A
-        else if (mnemonic == "LD A,H") {
-            opcodeTable[opcode] = [this]() { LD_A_H(); };
-        }
-        // Load L into A
-        else if (mnemonic == "LD A,L") {
-            opcodeTable[opcode] = [this]() { LD_A_L(); };
-        }
-        // Load memory at HL into A
-        else if (mnemonic == "LD A,(HL)") {
-            opcodeTable[opcode] = [this]() { LD_A_HLm(); };
-        }
-        // Load A into A
-        else if (mnemonic == "LD A,A") {
-            opcodeTable[opcode] = [this]() { LD_A_A(); };
-        }
-        // Add B to A
-        else if (mnemonic == "ADD A,B") {
-            opcodeTable[opcode] = [this]() { ADD_A_B(); };
-        }
-        // Add C to A
-        else if (mnemonic == "ADD A,C") {
-            opcodeTable[opcode] = [this]() { ADD_A_C(); };
-        }
-        // Add D to A
-        else if (mnemonic == "ADD A,D") {
-            opcodeTable[opcode] = [this]() { ADD_A_D(); };
-        }
-        // Add E to A
-        else if (mnemonic == "ADD A,E") {
-            opcodeTable[opcode] = [this]() { ADD_A_E(); };
-        }
-        // Add H to A
-        else if (mnemonic == "ADD A,H") {
-            opcodeTable[opcode] = [this]() { ADD_A_H(); };
-        }
-        // Add L to A
-        else if (mnemonic == "ADD A,L") {
-            opcodeTable[opcode] = [this]() { ADD_A_L(); };
-        }
-        // Add memory at HL to A
-        else if (mnemonic == "ADD A,(HL)") {
-            opcodeTable[opcode] = [this]() { ADD_A_HLm(); };
-        }
-        // Add A to A
-        else if (mnemonic == "ADD A,A") {
-            opcodeTable[opcode] = [this]() { ADD_A_A(); };
-        }
-        // Add B to A with carry
-        else if (mnemonic == "ADC A,B") {
-            opcodeTable[opcode] = [this]() { ADC_A_B(); };
-        }
-        // Add C to A with carry
-        else if (mnemonic == "ADC A,C") {
-            opcodeTable[opcode] = [this]() { ADC_A_C(); };
-        }
-        // Add D to A with carry
-        else if (mnemonic == "ADC A,D") {
-            opcodeTable[opcode] = [this]() { ADC_A_D(); };
-        }
-        // Add E to A with carry
-        else if (mnemonic == "ADC A,E") {
-            opcodeTable[opcode] = [this]() { ADC_A_E(); };
-        }
-        // Load A into high memory at C
-        else if (mnemonic == "LD (C),A") {
-            opcodeTable[opcode] = [this]() { LD_C_A(); };
-        }
-        // HALT
+
+        // INC/DEC instructions
+        else if (mnemonic == "INC BC") {
+            opcodeTable[opcode] = [this]() { INC_BC(); };
+        }
+        else if (mnemonic == "INC B") {
+            opcodeTable[opcode] = [this]() { INC_B(); };
+        }
+        else if (mnemonic == "DEC B") {
+            opcodeTable[opcode] = [this]() { DEC_B(); };
+        }
+        else if (mnemonic == "DEC BC") {
+            opcodeTable[opcode] = [this]() { DEC_BC(); };
+        }
+        else if (mnemonic == "INC C") {
+            opcodeTable[opcode] = [this]() { INC_C(); };
+        }
+        else if (mnemonic == "DEC C") {
+            opcodeTable[opcode] = [this]() { DEC_C(); };
+        }
+        else if (mnemonic == "INC DE") {
+            opcodeTable[opcode] = [this]() { INC_DE(); };
+        }
+        else if (mnemonic == "INC D") {
+            opcodeTable[opcode] = [this]() { INC_D(); };
+        }
+        else if (mnemonic == "DEC D") {
+            opcodeTable[opcode] = [this]() { DEC_D(); };
+        }
+        else if (mnemonic == "DEC DE") {
+            opcodeTable[opcode] = [this]() { DEC_DE(); };
+        }
+        else if (mnemonic == "INC E") {
+            opcodeTable[opcode] = [this]() { INC_E(); };
+        }
+        else if (mnemonic == "DEC E") {
+            opcodeTable[opcode] = [this]() { DEC_E(); };
+        }
+        else if (mnemonic == "INC HL") {
+            opcodeTable[opcode] = [this]() { INC_HL(); };
+        }
+        else if (mnemonic == "INC H") {
+            opcodeTable[opcode] = [this]() { INC_H(); };
+        }
+        else if (mnemonic == "DEC H") {
+            opcodeTable[opcode] = [this]() { DEC_H(); };
+        }
+        else if (mnemonic == "DEC HL") {
+            opcodeTable[opcode] = [this]() { DEC_HL(); };
+        }
+        else if (mnemonic == "INC L") {
+            opcodeTable[opcode] = [this]() { INC_L(); };
+        }
+        else if (mnemonic == "DEC L") {
+            opcodeTable[opcode] = [this]() { DEC_L(); };
+        }
+        else if (mnemonic == "INC SP") {
+            opcodeTable[opcode] = [this]() { INC_SP(); };
+        }
+        else if (mnemonic == "INC HL") {
+            opcodeTable[opcode] = [this]() { INC_HLm(); };
+        }
+        else if (mnemonic == "DEC HL") {
+            opcodeTable[opcode] = [this]() { DEC_HLm(); };
+        }
+        else if (mnemonic == "INC A") {
+            opcodeTable[opcode] = [this]() { INC_A(); };
+        }
+        else if (mnemonic == "DEC A") {
+            opcodeTable[opcode] = [this]() { DEC_A(); };
+        }
+
+        // Rotate/shift instructions
+        else if (mnemonic == "RLCA") {
+            opcodeTable[opcode] = [this]() { RLCA(); };
+        }
+        else if (mnemonic == "RRCA") {
+            opcodeTable[opcode] = [this]() { RRCA(); };
+        }
+        else if (mnemonic == "RLA") {
+            opcodeTable[opcode] = [this]() { RLA(); };
+        }
+        else if (mnemonic == "RRA") {
+            opcodeTable[opcode] = [this]() { RRA(); };
+        }
+
+        // Jump instructions
+        else if (mnemonic == "JR e8") {
+            opcodeTable[opcode] = [this]() { JR_e8(); };
+        }
+        else if (mnemonic == "JR NZ,e8") {
+            opcodeTable[opcode] = [this]() { JR_NZ_e8(); };
+        }
+        else if (mnemonic == "JR Z,e8") {
+            opcodeTable[opcode] = [this]() { JR_Z_e8(); };
+        }
+        else if (mnemonic == "JR NC,e8") {
+            opcodeTable[opcode] = [this]() { JR_NC_e8(); };
+        }
+        else if (mnemonic == "JR C,e8") {
+            opcodeTable[opcode] = [this]() { JR_C_e8(); };
+        }
+
+        // ADD instructions
+        else if (mnemonic == "ADD HL,BC") {
+            opcodeTable[opcode] = [this]() { ADD_HL_BC(); };
+        }
+        else if (mnemonic == "ADD HL,DE") {
+            opcodeTable[opcode] = [this]() { ADD_HL_DE(); };
+        }
+        else if (mnemonic == "ADD HL,HL") {
+            opcodeTable[opcode] = [this]() { ADD_HL_HL(); };
+        }
+        else if (mnemonic == "ADD HL,SP") {
+            opcodeTable[opcode] = [this]() { ADD_HL_SP(); };
+        }
+
+        // Misc instructions
+        else if (mnemonic == "STOP") {
+            opcodeTable[opcode] = [this]() { STOP(); };
+        }
+        else if (mnemonic == "DAA") {
+            opcodeTable[opcode] = [this]() { DAA(); };
+        }
+        else if (mnemonic == "CPL") {
+            opcodeTable[opcode] = [this]() { CPL(); };
+        }
+        else if (mnemonic == "SCF") {
+            opcodeTable[opcode] = [this]() { SCF(); };
+        }
+        else if (mnemonic == "CCF") {
+            opcodeTable[opcode] = [this]() { CCF(); };
+        }
         else if (mnemonic == "HALT") {
             opcodeTable[opcode] = [this]() { HALT(); };
-        }
-        // Load A into memory at HL
-        else if (mnemonic == "LD (HL),A") {
-            opcodeTable[opcode] = [this]() { LD_HLm_A(); };
-        }
-        // Load B into A (0x78)
-        else if (mnemonic == "LD A,B") {
-            opcodeTable[opcode] = [this]() { LD_A_B(); };
-        }
-        // Load C into A (0x79)
-        else if (mnemonic == "LD A,C") {
-            opcodeTable[opcode] = [this]() { LD_A_C(); };
-        }
-        // Load D into A (0x7A)
-        else if (mnemonic == "LD A,D") {
-            opcodeTable[opcode] = [this]() { LD_A_D(); };
-        }
-        // Load E into A (0x7B)
-        else if (mnemonic == "LD A,E") {
-            opcodeTable[opcode] = [this]() { LD_A_E(); };
-        }
-        // Load H into A (0x7C)
-        else if (mnemonic == "LD A,H") {
-            opcodeTable[opcode] = [this]() { LD_A_H(); };
-        }
-        // Load L into A (0x7D)
-        else if (mnemonic == "LD A,L") {
-            opcodeTable[opcode] = [this]() { LD_A_L(); };
-        }
-        // Load memory at HL into A (0x7E)
-        else if (mnemonic == "LD A,(HL)") {
-            opcodeTable[opcode] = [this]() { LD_A_HLm(); };
-        }
-        // Load A into A (0x7F)
-        else if (mnemonic == "LD A,A") {
-            opcodeTable[opcode] = [this]() { LD_A_A(); };
-        }
-        // Add B to A (0x80)
-        else if (mnemonic == "ADD A,B") {
-            opcodeTable[opcode] = [this]() { ADD_A_B(); };
-        }
-        // Add C to A (0x81)
-        else if (mnemonic == "ADD A,C") {
-            opcodeTable[opcode] = [this]() { ADD_A_C(); };
-        }
-        // Add D to A (0x82)
-        else if (mnemonic == "ADD A,D") {
-            opcodeTable[opcode] = [this]() { ADD_A_D(); };
-        }
-        // Add E to A (0x83)
-        else if (mnemonic == "ADD A,E") {
-            opcodeTable[opcode] = [this]() { ADD_A_E(); };
-        }
-        // Add H to A (0x84)
-        else if (mnemonic == "ADD A,H") {
-            opcodeTable[opcode] = [this]() { ADD_A_H(); };
-        }
-        // Add L to A (0x85)
-        else if (mnemonic == "ADD A,L") {
-            opcodeTable[opcode] = [this]() { ADD_A_L(); };
-        }
-        // Add memory at HL to A (0x86)
-        else if (mnemonic == "ADD A,(HL)") {
-            opcodeTable[opcode] = [this]() { ADD_A_HLm(); };
-        }
-        // Add A to A (0x87)
-        else if (mnemonic == "ADD A,A") {
-            opcodeTable[opcode] = [this]() { ADD_A_A(); };
-        }
-        // Add B to A with carry (0x88)
-        else if (mnemonic == "ADC A,B") {
-            opcodeTable[opcode] = [this]() { ADC_A_B(); };
-        }
-        // Add C to A with carry (0x89)
-        else if (mnemonic == "ADC A,C") {
-            opcodeTable[opcode] = [this]() { ADC_A_C(); };
-        }
-        // Add D to A with carry (0x8A)
-        else if (mnemonic == "ADC A,D") {
-            opcodeTable[opcode] = [this]() { ADC_A_D(); };
-        }
-        // Add E to A with carry (0x8B)
-        else if (mnemonic == "ADC A,E") {
-            opcodeTable[opcode] = [this]() { ADC_A_E(); };
         }
         else {
             std::cerr << "Unknown mnemonic: " << mnemonic << std::endl;
@@ -1926,6 +1486,668 @@ void CPU::ADC_A_E() {
     
     m_registers.a = result & 0xFF;
     m_cycles += 4;
+}
+
+void CPU::ADC_A_H() {
+    u16 result = m_registers.a + m_registers.h + (getFlag(FLAG_C) ? 1 : 0);
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.h & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADC_A_L() {
+    u16 result = m_registers.a + m_registers.l + (getFlag(FLAG_C) ? 1 : 0);
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.l & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::ADC_A_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    u16 result = m_registers.a + value + (getFlag(FLAG_C) ? 1 : 0);
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 8;
+}
+
+void CPU::ADC_A_A() {
+    u16 result = m_registers.a + m_registers.a + (getFlag(FLAG_C) ? 1 : 0);
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.a & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 4;
+}
+
+void CPU::SUB_B() {
+    u8 result = m_registers.a - m_registers.b;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.b & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.b);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SUB_C() {
+    u8 result = m_registers.a - m_registers.c;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.c & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.c);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SUB_D() {
+    u8 result = m_registers.a - m_registers.d;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.d & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.d);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SUB_E() {
+    u8 result = m_registers.a - m_registers.e;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.e & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.e);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SUB_H() {
+    u8 result = m_registers.a - m_registers.h;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.h & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.h);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SUB_L() {
+    u8 result = m_registers.a - m_registers.l;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.l & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.l);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SUB_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    u8 result = m_registers.a - value;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F));
+    setFlag(FLAG_C, m_registers.a < value);
+    
+    m_registers.a = result;
+    m_cycles += 8;
+}
+
+void CPU::SUB_A() {
+    setFlag(FLAG_Z, true);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_registers.a = 0;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_B() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.b - carry;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.b & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.b + carry);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_C() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.c - carry;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.c & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.c + carry);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_D() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.d - carry;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.d & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.d + carry);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_E() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.e - carry;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.e & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.e + carry);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_H() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.h - carry;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.h & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.h + carry);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_L() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - m_registers.l - carry;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.l & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < m_registers.l + carry);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::SBC_A_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - value - carry;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < value + carry);
+    
+    m_registers.a = result;
+    m_cycles += 8;
+}
+
+void CPU::SBC_A_A() {
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = carry ? 0xFF : 0;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, carry);
+    setFlag(FLAG_C, carry);
+    
+    m_registers.a = result;
+    m_cycles += 4;
+}
+
+void CPU::AND_B() {
+    m_registers.a &= m_registers.b;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::AND_C() {
+    m_registers.a &= m_registers.c;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::AND_D() {
+    m_registers.a &= m_registers.d;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::AND_E() {
+    m_registers.a &= m_registers.e;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::AND_H() {
+    m_registers.a &= m_registers.h;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::AND_L() {
+    m_registers.a &= m_registers.l;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::AND_HLm() {
+    m_registers.a &= m_memory.read(m_registers.hl);
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::AND_A() {
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::XOR_B() {
+    m_registers.a ^= m_registers.b;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::XOR_C() {
+    m_registers.a ^= m_registers.c;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::XOR_D() {
+    m_registers.a ^= m_registers.d;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::XOR_E() {
+    m_registers.a ^= m_registers.e;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::XOR_H() {
+    m_registers.a ^= m_registers.h;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::XOR_L() {
+    m_registers.a ^= m_registers.l;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::XOR_HLm() {
+    m_registers.a ^= m_memory.read(m_registers.hl);
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::XOR_A() {
+    m_registers.a = 0;
+    
+    setFlag(FLAG_Z, true);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::OR_B() {
+    m_registers.a |= m_registers.b;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::OR_C() {
+    m_registers.a |= m_registers.c;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::OR_D() {
+    m_registers.a |= m_registers.d;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::OR_E() {
+    m_registers.a |= m_registers.e;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::OR_H() {
+    m_registers.a |= m_registers.h;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::OR_L() {
+    m_registers.a |= m_registers.l;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::OR_HLm() {
+    m_registers.a |= m_memory.read(m_registers.hl);
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::OR_A() {
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::CP_B() {
+    u8 result = m_registers.a - m_registers.b;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.b & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.b);
+    
+    m_cycles += 4;
+}
+
+void CPU::CP_C() {
+    u8 result = m_registers.a - m_registers.c;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.c & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.c);
+    
+    m_cycles += 4;
+}
+
+void CPU::CP_D() {
+    u8 result = m_registers.a - m_registers.d;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.d & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.d);
+    
+    m_cycles += 4;
+}
+
+void CPU::CP_E() {
+    u8 result = m_registers.a - m_registers.e;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.e & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.e);
+    
+    m_cycles += 4;
+}
+
+void CPU::CP_H() {
+    u8 result = m_registers.a - m_registers.h;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.h & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.h);
+    
+    m_cycles += 4;
+}
+
+void CPU::CP_L() {
+    u8 result = m_registers.a - m_registers.l;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.l & 0x0F));
+    setFlag(FLAG_C, m_registers.a < m_registers.l);
+    
+    m_cycles += 4;
+}
+
+void CPU::CP_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    u8 result = m_registers.a - value;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F));
+    setFlag(FLAG_C, m_registers.a < value);
+    
+    m_cycles += 8;
+}
+
+void CPU::CP_A() {
+    setFlag(FLAG_Z, true);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 4;
+}
+
+void CPU::RET_NZ() {
+    if (!getFlag(FLAG_Z)) {
+        m_registers.pc = pop();
+        m_cycles += 20;
+    } else {
+        m_cycles += 8;
+    }
+}
+
+void CPU::POP_BC() {
+    m_registers.bc = pop();
+    m_cycles += 12;
+}
+
+void CPU::JP_NZ_a16() {
+    u16 address = readPC16();
+    
+    if (!getFlag(FLAG_Z)) {
+        m_registers.pc = address;
+        m_cycles += 16;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::JP_a16() {
+    m_registers.pc = readPC16();
+    m_cycles += 16;
+}
+
+void CPU::CALL_NZ_a16() {
+    u16 address = readPC16();
+    
+    if (!getFlag(FLAG_Z)) {
+        push(m_registers.pc);
+        m_registers.pc = address;
+        m_cycles += 24;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::PUSH_BC() {
+    push(m_registers.bc);
+    m_cycles += 16;
+}
+
+void CPU::ADD_A_n8() {
+    u8 value = readPC();
+    u16 result = m_registers.a + value;
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 8;
+}
+
+void CPU::RST_00H() {
+    push(m_registers.pc);
+    m_registers.pc = 0x0000;
+    m_cycles += 16;
 }
 
 
