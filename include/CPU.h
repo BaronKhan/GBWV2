@@ -120,4 +120,39 @@ private:
 
     // Instructions
     void NOP();
+    void LD_BC_n16();  // 0x01
+    void LD_BC_A();    // 0x02
+    void INC_BC();     // 0x03
+    void INC_B();      // 0x04
+    void DEC_B();      // 0x05
+    void LD_B_n8();    // 0x06
+    void RLCA();       // 0x07
+    void LD_a16_SP();  // 0x08
+    void ADD_HL_BC();  // 0x09
+    void LD_A_BC();    // 0x0A
+    void DEC_BC();     // 0x0B
+    void INC_C();      // 0x0C
+    void DEC_C();      // 0x0D
+    void LD_C_n8();    // 0x0E
+    void RRCA();       // 0x0F
+    void STOP();       // 0x10
+    void LD_DE_n16();  // 0x11
+    void LD_DE_A();    // 0x12
+    void INC_DE();     // 0x13
+    void INC_D();      // 0x14
+    void DEC_D();      // 0x15
+    void LD_D_n8();    // 0x16
+    void RLA();        // 0x17
+    void JR_e8();      // 0x18
+    void ADD_HL_DE();  // 0x19
+    void LD_A_DE();    // 0x1A
+    void DEC_DE();     // 0x1B
+    void INC_E();      // 0x1C
+    void DEC_E();      // 0x1D
+    void LD_E_n8();    // 0x1E
+    void RRA();        // 0x1F
+    void JR_NZ_e8();   // 0x20
+    void LD_HL_n16();  // 0x21
+    void LD_HLI_A();   // 0x22
+    void INC_HL();     // 0x23
 }; 

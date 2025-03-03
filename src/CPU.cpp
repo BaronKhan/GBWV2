@@ -207,6 +207,30 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         if (mnemonic == "NOP") {
             opcodeTable[opcode] = [this]() { NOP(); };
         }
+        // Load immediate 16-bit value into BC
+        else if (mnemonic == "LD_BC_n16") {
+            opcodeTable[opcode] = [this]() { LD_BC_n16(); };
+        }
+        // Load A into memory pointed by BC
+        else if (mnemonic == "LD_BC_A") {
+            opcodeTable[opcode] = [this]() { LD_BC_A(); };
+        }
+        // Increment BC
+        else if (mnemonic == "INC_BC") {
+            opcodeTable[opcode] = [this]() { INC_BC(); };
+        }
+        // Increment B
+        else if (mnemonic == "INC_B") {
+            opcodeTable[opcode] = [this]() { INC_B(); };
+        }
+        // Decrement B
+        else if (mnemonic == "DEC_B") {
+            opcodeTable[opcode] = [this]() { DEC_B(); };
+        }
+        // Load immediate 8-bit value into B
+        else if (mnemonic == "LD_B_n8") {
+            opcodeTable[opcode] = [this]() { LD_B_n8(); };
+        }
         // ... more mappings will be added
         else {
             std::cerr << "Unknown mnemonic: " << mnemonic << std::endl;
@@ -214,8 +238,26 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
     }
     // CB-prefixed opcodes
     else {
+        // RLCA
+        if (mnemonic == "RLCA") {
+            opcodeTable[opcode] = [this]() { RLCA(); };
+        }
+        // Load 16-bit immediate value into SP
+        else if (mnemonic == "LD_a16_SP") {
+            opcodeTable[opcode] = [this]() { LD_a16_SP(); };
+        }
+        // Add HL and BC
+        else if (mnemonic == "ADD_HL_BC") {
+            opcodeTable[opcode] = [this]() { ADD_HL_BC(); };
+        }
+        // Load A into memory pointed by BC
+        else if (mnemonic == "LD_A_BC") {
+            opcodeTable[opcode] = [this]() { LD_A_BC(); };
+        }
         // ... more mappings will be added
-        std::cerr << "Unknown CB-prefixed mnemonic: " << mnemonic << std::endl;
+        else {
+            std::cerr << "Unknown CB-prefixed mnemonic: " << mnemonic << std::endl;
+        }
     }
 }
 
@@ -286,4 +328,294 @@ void CPU::setFlag(Flags flag, bool value) {
 // NOP
 void CPU::NOP() {
     m_cycles += 4;
+}
+
+// Load immediate 16-bit value into BC
+void CPU::LD_BC_n16() {
+    m_registers.bc = readPC16();
+    m_cycles += 12;
+}
+
+// Load A into memory pointed by BC
+void CPU::LD_BC_A() {
+    m_memory.write(m_registers.bc, m_registers.a);
+    m_cycles += 8;
+}
+
+// Increment BC
+void CPU::INC_BC() {
+    m_registers.bc++;
+    m_cycles += 8;
+}
+
+// Increment B
+void CPU::INC_B() {
+    u8 result = m_registers.b + 1;
+    
+    // Set flags
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.b & 0x0F) == 0x0F);
+    
+    m_registers.b = result;
+    m_cycles += 4;
+}
+
+// Decrement B
+void CPU::DEC_B() {
+    u8 result = m_registers.b - 1;
+    
+    // Set flags
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.b & 0x0F) == 0x00);
+    
+    m_registers.b = result;
+    m_cycles += 4;
+}
+
+// Load immediate 8-bit value into B
+void CPU::LD_B_n8() {
+    m_registers.b = readPC();
+    m_cycles += 8;
+}
+
+// Rotate A left through carry
+void CPU::RLCA() {
+    bool carry = (m_registers.a & 0x80) != 0;
+    m_registers.a = (m_registers.a << 1) | (carry ? 1 : 0);
+    
+    setFlag(FLAG_Z, false);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 4;
+}
+
+// Load 16-bit immediate value into SP
+void CPU::LD_a16_SP() {
+    u16 address = readPC16();
+    m_memory.write(address, m_registers.sp & 0xFF);
+    m_memory.write(address + 1, m_registers.sp >> 8);
+    m_cycles += 20;
+}
+
+// Add HL and BC
+void CPU::ADD_HL_BC() {
+    u32 result = m_registers.hl + m_registers.bc;
+    
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.hl & 0x0FFF) + (m_registers.bc & 0x0FFF) > 0x0FFF);
+    setFlag(FLAG_C, result > 0xFFFF);
+    
+    m_registers.hl = result & 0xFFFF;
+    m_cycles += 8;
+}
+
+// Load A into memory pointed by BC
+void CPU::LD_A_BC() {
+    m_registers.a = m_memory.read(m_registers.bc);
+    m_cycles += 8;
+}
+
+void CPU::DEC_BC() {
+    m_registers.bc--;
+    m_cycles += 8;
+}
+
+void CPU::INC_C() {
+    u8 result = m_registers.c + 1;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.c & 0x0F) == 0x0F);
+    
+    m_registers.c = result;
+    m_cycles += 4;
+}
+
+void CPU::DEC_C() {
+    u8 result = m_registers.c - 1;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.c & 0x0F) == 0x00);
+    
+    m_registers.c = result;
+    m_cycles += 4;
+}
+
+void CPU::LD_C_n8() {
+    m_registers.c = readPC();
+    m_cycles += 8;
+}
+
+void CPU::RRCA() {
+    bool carry = (m_registers.a & 0x01) != 0;
+    m_registers.a = (m_registers.a >> 1) | (carry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, false);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 4;
+}
+
+void CPU::STOP() {
+    m_stopped = true;
+    readPC(); // Skip the next byte
+    m_cycles += 4;
+}
+
+void CPU::LD_DE_n16() {
+    m_registers.de = readPC16();
+    m_cycles += 12;
+}
+
+void CPU::LD_DE_A() {
+    m_memory.write(m_registers.de, m_registers.a);
+    m_cycles += 8;
+}
+
+void CPU::INC_DE() {
+    m_registers.de++;
+    m_cycles += 8;
+}
+
+void CPU::INC_D() {
+    u8 result = m_registers.d + 1;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.d & 0x0F) == 0x0F);
+    
+    m_registers.d = result;
+    m_cycles += 4;
+}
+
+void CPU::DEC_D() {
+    u8 result = m_registers.d - 1;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.d & 0x0F) == 0x00);
+    
+    m_registers.d = result;
+    m_cycles += 4;
+}
+
+void CPU::LD_D_n8() {
+    m_registers.d = readPC();
+    m_cycles += 8;
+}
+
+void CPU::RLA() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.a & 0x80) != 0;
+    
+    m_registers.a = (m_registers.a << 1) | (oldCarry ? 1 : 0);
+    
+    setFlag(FLAG_Z, false);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 4;
+}
+
+void CPU::JR_e8() {
+    s8 offset = static_cast<s8>(readPC());
+    m_registers.pc += offset;
+    m_cycles += 12;
+}
+
+void CPU::ADD_HL_DE() {
+    u32 result = m_registers.hl + m_registers.de;
+    
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.hl & 0x0FFF) + (m_registers.de & 0x0FFF) > 0x0FFF);
+    setFlag(FLAG_C, result > 0xFFFF);
+    
+    m_registers.hl = result & 0xFFFF;
+    m_cycles += 8;
+}
+
+void CPU::LD_A_DE() {
+    m_registers.a = m_memory.read(m_registers.de);
+    m_cycles += 8;
+}
+
+void CPU::DEC_DE() {
+    m_registers.de--;
+    m_cycles += 8;
+}
+
+void CPU::INC_E() {
+    u8 result = m_registers.e + 1;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.e & 0x0F) == 0x0F);
+    
+    m_registers.e = result;
+    m_cycles += 4;
+}
+
+void CPU::DEC_E() {
+    u8 result = m_registers.e - 1;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.e & 0x0F) == 0x00);
+    
+    m_registers.e = result;
+    m_cycles += 4;
+}
+
+void CPU::LD_E_n8() {
+    m_registers.e = readPC();
+    m_cycles += 8;
+}
+
+void CPU::RRA() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.a & 0x01) != 0;
+    
+    m_registers.a = (m_registers.a >> 1) | (oldCarry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, false);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 4;
+}
+
+void CPU::JR_NZ_e8() {
+    s8 offset = static_cast<s8>(readPC());
+    
+    if (!getFlag(FLAG_Z)) {
+        m_registers.pc += offset;
+        m_cycles += 12;
+    } else {
+        m_cycles += 8;
+    }
+}
+
+void CPU::LD_HL_n16() {
+    m_registers.hl = readPC16();
+    m_cycles += 12;
+}
+
+void CPU::LD_HLI_A() {
+    m_memory.write(m_registers.hl, m_registers.a);
+    m_registers.hl++;
+    m_cycles += 8;
+}
+
+void CPU::INC_HL() {
+    m_registers.hl++;
+    m_cycles += 8;
 }
