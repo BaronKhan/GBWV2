@@ -1047,6 +1047,90 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         else if (mnemonic == "PUSH DE") {
             opcodeTable[opcode] = [this]() { PUSH_DE(); };
         }
+        // Subtract immediate from A
+        else if (mnemonic == "SUB n8") {
+            opcodeTable[opcode] = [this]() { SUB_n8(); };
+        }
+        // Reset to 0x10
+        else if (mnemonic == "RST 10H") {
+            opcodeTable[opcode] = [this]() { RST_10H(); };
+        }
+        // Return if carry
+        else if (mnemonic == "RET C") {
+            opcodeTable[opcode] = [this]() { RET_C(); };
+        }
+        // Return and enable interrupts
+        else if (mnemonic == "RETI") {
+            opcodeTable[opcode] = [this]() { RETI(); };
+        }
+        // Jump if carry
+        else if (mnemonic == "JP C,a16") {
+            opcodeTable[opcode] = [this]() { JP_C_a16(); };
+        }
+        // Call if carry
+        else if (mnemonic == "CALL C,a16") {
+            opcodeTable[opcode] = [this]() { CALL_C_a16(); };
+        }
+        // Subtract immediate from A with carry
+        else if (mnemonic == "SBC A,n8") {
+            opcodeTable[opcode] = [this]() { SBC_A_n8(); };
+        }
+        // Reset to 0x18
+        else if (mnemonic == "RST 18H") {
+            opcodeTable[opcode] = [this]() { RST_18H(); };
+        }
+        // Load A into high memory
+        else if (mnemonic == "LDH (n8),A") {
+            opcodeTable[opcode] = [this]() { LDH_n8_A(); };
+        }
+        // Pop HL from stack
+        else if (mnemonic == "POP HL") {
+            opcodeTable[opcode] = [this]() { POP_HL(); };
+        }
+        // Load A into high memory at C
+        else if (mnemonic == "LD (C),A") {
+            opcodeTable[opcode] = [this]() { LD_C_A(); };
+        }
+        // Push HL onto stack
+        else if (mnemonic == "PUSH HL") {
+            opcodeTable[opcode] = [this]() { PUSH_HL(); };
+        }
+        // AND immediate with A
+        else if (mnemonic == "AND n8") {
+            opcodeTable[opcode] = [this]() { AND_n8(); };
+        }
+        // Reset to 0x20
+        else if (mnemonic == "RST 20H") {
+            opcodeTable[opcode] = [this]() { RST_20H(); };
+        }
+        // Add signed immediate to SP
+        else if (mnemonic == "ADD SP,e8") {
+            opcodeTable[opcode] = [this]() { ADD_SP_e8(); };
+        }
+        // Jump to HL
+        else if (mnemonic == "JP HL") {
+            opcodeTable[opcode] = [this]() { JP_HL(); };
+        }
+        // Load A into memory
+        else if (mnemonic == "LD (a16),A") {
+            opcodeTable[opcode] = [this]() { LD_a16_A(); };
+        }
+        // XOR immediate with A
+        else if (mnemonic == "XOR n8") {
+            opcodeTable[opcode] = [this]() { XOR_n8(); };
+        }
+        // Reset to 0x28
+        else if (mnemonic == "RST 28H") {
+            opcodeTable[opcode] = [this]() { RST_28H(); };
+        }
+        // Load from high memory into A
+        else if (mnemonic == "LDH A,(n8)") {
+            opcodeTable[opcode] = [this]() { LDH_A_n8(); };
+        }
+        // HALT
+        else if (mnemonic == "HALT") {
+            opcodeTable[opcode] = [this]() { HALT(); };
+        }
         else {
             std::cerr << "Unknown mnemonic: " << mnemonic << std::endl;
         }
@@ -1933,844 +2017,9 @@ void CPU::LD_HLm_L() {
     m_cycles += 8;
 }
 
-void CPU::LD_HLm_A() {
-    m_memory.write(m_registers.hl, m_registers.a);
-    m_cycles += 8;
-}
-
-void CPU::LD_A_B() {
-    m_registers.a = m_registers.b;
-    m_cycles += 4;
-}
-
-void CPU::LD_A_C() {
-    m_registers.a = m_registers.c;
-    m_cycles += 4;
-}
-
-void CPU::LD_A_D() {
-    m_registers.a = m_registers.d;
-    m_cycles += 4;
-}
-
-void CPU::LD_A_E() {
-    m_registers.a = m_registers.e;
-    m_cycles += 4;
-}
-
-void CPU::LD_A_H() {
-    m_registers.a = m_registers.h;
-    m_cycles += 4;
-}
-
-void CPU::LD_A_L() {
-    m_registers.a = m_registers.l;
-    m_cycles += 4;
-}
-
-void CPU::LD_A_HLm() {
-    m_registers.a = m_memory.read(m_registers.hl);
-    m_cycles += 8;
-}
-
-void CPU::LD_A_A() {
-    // No operation needed - loading A into itself
-    m_cycles += 4;
-}
-
-void CPU::ADD_A_B() {
-    u16 result = m_registers.a + m_registers.b;
-    
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.b & 0x0F) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADD_A_C() {
-    u16 result = m_registers.a + m_registers.c;
-    
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.c & 0x0F) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADD_A_D() {
-    u16 result = m_registers.a + m_registers.d;
-    
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.d & 0x0F) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADD_A_E() {
-    u16 result = m_registers.a + m_registers.e;
-    
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.e & 0x0F) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADD_A_H() {
-    u16 result = m_registers.a + m_registers.h;
-    
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.h & 0x0F) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADD_A_L() {
-    u16 result = m_registers.a + m_registers.l;
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.l & 0x0F) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADD_A_HLm() {
-    u8 value = m_memory.read(m_registers.hl);
-    u16 result = m_registers.a + value;
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 8;
-}
-
-void CPU::ADD_A_A() {
-    u16 result = m_registers.a + m_registers.a;
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.a & 0x0F) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADC_A_B() {
-    u16 result = m_registers.a + m_registers.b + (getFlag(FLAG_C) ? 1 : 0);
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.b & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADC_A_C() {
-    u16 result = m_registers.a + m_registers.c + (getFlag(FLAG_C) ? 1 : 0);
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.c & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADC_A_D() {
-    u16 result = m_registers.a + m_registers.d + (getFlag(FLAG_C) ? 1 : 0);
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.d & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADC_A_E() {
-    u16 result = m_registers.a + m_registers.e + (getFlag(FLAG_C) ? 1 : 0);
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.e & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADC_A_H() {
-    u16 result = m_registers.a + m_registers.h + (getFlag(FLAG_C) ? 1 : 0);
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.h & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADC_A_L() {
-    u16 result = m_registers.a + m_registers.l + (getFlag(FLAG_C) ? 1 : 0);
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.l & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::ADC_A_HLm() {
-    u8 value = m_memory.read(m_registers.hl);
-    u16 result = m_registers.a + value + (getFlag(FLAG_C) ? 1 : 0);
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 8;
-}
-
-void CPU::ADC_A_A() {
-    u16 result = m_registers.a + m_registers.a + (getFlag(FLAG_C) ? 1 : 0);
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (m_registers.a & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 4;
-}
-
-void CPU::SUB_B() {
-    u8 result = m_registers.a - m_registers.b;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.b & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.b);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SUB_C() {
-    u8 result = m_registers.a - m_registers.c;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.c & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.c);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SUB_D() {
-    u8 result = m_registers.a - m_registers.d;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.d & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.d);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SUB_E() {
-    u8 result = m_registers.a - m_registers.e;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.e & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.e);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SUB_H() {
-    u8 result = m_registers.a - m_registers.h;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.h & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.h);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SUB_L() {
-    u8 result = m_registers.a - m_registers.l;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.l & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.l);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SUB_HLm() {
-    u8 value = m_memory.read(m_registers.hl);
-    u8 result = m_registers.a - value;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F));
-    setFlag(FLAG_C, m_registers.a < value);
-    m_registers.a = result;
-    m_cycles += 8;
-}
-
-void CPU::SUB_A() {
-    setFlag(FLAG_Z, true);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_registers.a = 0;
-    m_cycles += 4;
-}
-
-void CPU::SBC_A_B() {
-    u8 carry = getFlag(FLAG_C) ? 1 : 0;
-    u8 result = m_registers.a - m_registers.b - carry;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.b & 0x0F) + carry);
-    setFlag(FLAG_C, m_registers.a < m_registers.b + carry);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SBC_A_C() {
-    u8 carry = getFlag(FLAG_C) ? 1 : 0;
-    u8 result = m_registers.a - m_registers.c - carry;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.c & 0x0F) + carry);
-    setFlag(FLAG_C, m_registers.a < m_registers.c + carry);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SBC_A_D() {
-    u8 carry = getFlag(FLAG_C) ? 1 : 0;
-    u8 result = m_registers.a - m_registers.d - carry;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.d & 0x0F) + carry);
-    setFlag(FLAG_C, m_registers.a < m_registers.d + carry);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SBC_A_E() {
-    u8 carry = getFlag(FLAG_C) ? 1 : 0;
-    u8 result = m_registers.a - m_registers.e - carry;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.e & 0x0F) + carry);
-    setFlag(FLAG_C, m_registers.a < m_registers.e + carry);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SBC_A_H() {
-    u8 carry = getFlag(FLAG_C) ? 1 : 0;
-    u8 result = m_registers.a - m_registers.h - carry;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.h & 0x0F) + carry);
-    setFlag(FLAG_C, m_registers.a < m_registers.h + carry);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SBC_A_L() {
-    u8 carry = getFlag(FLAG_C) ? 1 : 0;
-    u8 result = m_registers.a - m_registers.l - carry;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.l & 0x0F) + carry);
-    setFlag(FLAG_C, m_registers.a < m_registers.l + carry);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::SBC_A_HLm() {
-    u8 carry = getFlag(FLAG_C) ? 1 : 0;
-    u8 value = m_memory.read(m_registers.hl);
-    u8 result = m_registers.a - value - carry;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F) + carry);
-    setFlag(FLAG_C, m_registers.a < value + carry);
-    m_registers.a = result;
-    m_cycles += 8;
-}
-
-void CPU::SBC_A_A() {
-    u8 carry = getFlag(FLAG_C) ? 1 : 0;
-    u8 result = m_registers.a - m_registers.a - carry;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, carry);
-    setFlag(FLAG_C, carry);
-    m_registers.a = result;
-    m_cycles += 4;
-}
-
-void CPU::AND_B() {
-    m_registers.a &= m_registers.b;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, true);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::AND_C() {
-    m_registers.a &= m_registers.c;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, true);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::AND_D() {
-    m_registers.a &= m_registers.d;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, true);
-    setFlag(FLAG_C, false);
+void CPU::HALT() {
+    m_halted = true;
     m_cycles += 4;
 }
 
-void CPU::AND_E() {
-    m_registers.a &= m_registers.e;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, true);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::AND_H() {
-    m_registers.a &= m_registers.h;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, true);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::AND_L() {
-    m_registers.a &= m_registers.l;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, true);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::AND_HLm() {
-    m_registers.a &= m_memory.read(m_registers.hl);
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, true);
-    setFlag(FLAG_C, false);
-    m_cycles += 8;
-}
-
-void CPU::AND_A() {
-    // AND A with itself - result is the same as A
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, true);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::XOR_B() {
-    m_registers.a ^= m_registers.b;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::XOR_C() {
-    m_registers.a ^= m_registers.c;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::XOR_D() {
-    m_registers.a ^= m_registers.d;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::XOR_E() {
-    m_registers.a ^= m_registers.e;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::XOR_H() {
-    m_registers.a ^= m_registers.h;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::XOR_L() {
-    m_registers.a ^= m_registers.l;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::XOR_HLm() {
-    m_registers.a ^= m_memory.read(m_registers.hl);
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 8;
-}
-
-void CPU::XOR_A() {
-    m_registers.a = 0;  // XOR with itself always gives 0
-    setFlag(FLAG_Z, true);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::OR_B() {
-    m_registers.a |= m_registers.b;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::OR_C() {
-    m_registers.a |= m_registers.c;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::OR_D() {
-    m_registers.a |= m_registers.d;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::OR_E() {
-    m_registers.a |= m_registers.e;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::OR_H() {
-    m_registers.a |= m_registers.h;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::OR_L() {
-    m_registers.a |= m_registers.l;
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::OR_HLm() {
-    m_registers.a |= m_memory.read(m_registers.hl);
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 8;
-}
-
-void CPU::OR_A() {
-    // OR A with itself - result is the same as A
-    setFlag(FLAG_Z, m_registers.a == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::CP_B() {
-    u8 result = m_registers.a - m_registers.b;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.b & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.b);
-    m_cycles += 4;
-}
 
-void CPU::CP_C() {
-    u8 result = m_registers.a - m_registers.c;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.c & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.c);
-    m_cycles += 4;
-}
-
-void CPU::CP_D() {
-    u8 result = m_registers.a - m_registers.d;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.d & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.d);
-    m_cycles += 4;
-}
-
-void CPU::CP_E() {
-    u8 result = m_registers.a - m_registers.e;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.e & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.e);
-    m_cycles += 4;
-}
-
-void CPU::CP_H() {
-    u8 result = m_registers.a - m_registers.h;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.h & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.h);
-    m_cycles += 4;
-}
-
-void CPU::CP_L() {
-    u8 result = m_registers.a - m_registers.l;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (m_registers.l & 0x0F));
-    setFlag(FLAG_C, m_registers.a < m_registers.l);
-    m_cycles += 4;
-}
-
-void CPU::CP_HLm() {
-    u8 value = m_memory.read(m_registers.hl);
-    u8 result = m_registers.a - value;
-    setFlag(FLAG_Z, result == 0);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F));
-    setFlag(FLAG_C, m_registers.a < value);
-    m_cycles += 8;
-}
-
-void CPU::CP_A() {
-    // Compare A with itself - always sets Z flag and N flag
-    setFlag(FLAG_Z, true);
-    setFlag(FLAG_N, true);
-    setFlag(FLAG_H, false);
-    setFlag(FLAG_C, false);
-    m_cycles += 4;
-}
-
-void CPU::RET_NZ() {
-    if (!getFlag(FLAG_Z)) {
-        m_registers.pc = pop();
-        m_cycles += 20;
-    } else {
-        m_cycles += 8;
-    }
-}
-
-void CPU::POP_BC() {
-    m_registers.bc = pop();
-    m_cycles += 12;
-}
-
-void CPU::JP_NZ_a16() {
-    u16 address = readPC16();
-    if (!getFlag(FLAG_Z)) {
-        m_registers.pc = address;
-        m_cycles += 16;
-    } else {
-        m_cycles += 12;
-    }
-}
-
-void CPU::JP_a16() {
-    m_registers.pc = readPC16();
-    m_cycles += 16;
-}
-
-void CPU::CALL_NZ_a16() {
-    u16 address = readPC16();
-    if (!getFlag(FLAG_Z)) {
-        push(m_registers.pc);
-        m_registers.pc = address;
-        m_cycles += 24;
-    } else {
-        m_cycles += 12;
-    }
-}
-
-void CPU::PUSH_BC() {
-    push(m_registers.bc);
-    m_cycles += 16;
-}
-
-void CPU::ADD_A_n8() {
-    u8 value = readPC();
-    u16 result = m_registers.a + value;
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 8;
-}
-
-void CPU::RST_00H() {
-    push(m_registers.pc);
-    m_registers.pc = 0x0000;
-    m_cycles += 16;
-}
-
-void CPU::RET_Z() {
-    if (getFlag(FLAG_Z)) {
-        m_registers.pc = pop();
-        m_cycles += 20;
-    } else {
-        m_cycles += 8;
-    }
-}
-
-void CPU::RET() {
-    m_registers.pc = pop();
-    m_cycles += 16;
-}
-
-void CPU::JP_Z_a16() {
-    u16 address = readPC16();
-    if (getFlag(FLAG_Z)) {
-        m_registers.pc = address;
-        m_cycles += 16;
-    } else {
-        m_cycles += 12;
-    }
-}
-
-void CPU::PREFIX_CB() {
-    u8 opcode = readPC();
-    executeCBOpcode(opcode);
-    m_cycles += 4;
-}
-
-void CPU::CALL_Z_a16() {
-    u16 address = readPC16();
-    if (getFlag(FLAG_Z)) {
-        push(m_registers.pc);
-        m_registers.pc = address;
-        m_cycles += 24;
-    } else {
-        m_cycles += 12;
-    }
-}
-
-void CPU::CALL_a16() {
-    u16 address = readPC16();
-    push(m_registers.pc);
-    m_registers.pc = address;
-    m_cycles += 24;
-}
-
-void CPU::ADC_A_n8() {
-    u8 value = readPC();
-    u16 result = m_registers.a + value + (getFlag(FLAG_C) ? 1 : 0);
-    setFlag(FLAG_Z, (result & 0xFF) == 0);
-    setFlag(FLAG_N, false);
-    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
-    setFlag(FLAG_C, result > 0xFF);
-    m_registers.a = result & 0xFF;
-    m_cycles += 8;
-}
-
-void CPU::RST_08H() {
-    push(m_registers.pc);
-    m_registers.pc = 0x0008;
-    m_cycles += 16;
-}
-
-void CPU::RET_NC() {
-    if (!getFlag(FLAG_C)) {
-        m_registers.pc = pop();
-        m_cycles += 20;
-    } else {
-        m_cycles += 8;
-    }
-}
-
-void CPU::POP_DE() {
-    m_registers.de = pop();
-    m_cycles += 12;
-}
-
-void CPU::JP_NC_a16() {
-    u16 address = readPC16();
-    if (!getFlag(FLAG_C)) {
-        m_registers.pc = address;
-        m_cycles += 16;
-    } else {
-        m_cycles += 12;
-    }
-}
-
-void CPU::CALL_NC_a16() {
-    u16 address = readPC16();
-    if (!getFlag(FLAG_C)) {
-        push(m_registers.pc);
-        m_registers.pc = address;
-        m_cycles += 24;
-    } else {
-        m_cycles += 12;
-    }
-}
-
-void CPU::PUSH_DE() {
-    push(m_registers.de);
-    m_cycles += 16;
-}
