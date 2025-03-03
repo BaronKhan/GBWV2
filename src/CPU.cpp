@@ -967,6 +967,86 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         else if (mnemonic == "RET NZ") {
             opcodeTable[opcode] = [this]() { RET_NZ(); };
         }
+        // Pop BC from stack
+        else if (mnemonic == "POP BC") {
+            opcodeTable[opcode] = [this]() { POP_BC(); };
+        }
+        // Jump if not zero
+        else if (mnemonic == "JP NZ,a16") {
+            opcodeTable[opcode] = [this]() { JP_NZ_a16(); };
+        }
+        // Jump to address
+        else if (mnemonic == "JP a16") {
+            opcodeTable[opcode] = [this]() { JP_a16(); };
+        }
+        // Call if not zero
+        else if (mnemonic == "CALL NZ,a16") {
+            opcodeTable[opcode] = [this]() { CALL_NZ_a16(); };
+        }
+        // Push BC onto stack
+        else if (mnemonic == "PUSH BC") {
+            opcodeTable[opcode] = [this]() { PUSH_BC(); };
+        }
+        // Add immediate to A
+        else if (mnemonic == "ADD A,n8") {
+            opcodeTable[opcode] = [this]() { ADD_A_n8(); };
+        }
+        // Reset to 0x00
+        else if (mnemonic == "RST 00H") {
+            opcodeTable[opcode] = [this]() { RST_00H(); };
+        }
+        // Return if zero
+        else if (mnemonic == "RET Z") {
+            opcodeTable[opcode] = [this]() { RET_Z(); };
+        }
+        // Return
+        else if (mnemonic == "RET") {
+            opcodeTable[opcode] = [this]() { RET(); };
+        }
+        // Jump if zero
+        else if (mnemonic == "JP Z,a16") {
+            opcodeTable[opcode] = [this]() { JP_Z_a16(); };
+        }
+        // CB prefix
+        else if (mnemonic == "PREFIX CB") {
+            opcodeTable[opcode] = [this]() { PREFIX_CB(); };
+        }
+        // Call if zero
+        else if (mnemonic == "CALL Z,a16") {
+            opcodeTable[opcode] = [this]() { CALL_Z_a16(); };
+        }
+        // Call
+        else if (mnemonic == "CALL a16") {
+            opcodeTable[opcode] = [this]() { CALL_a16(); };
+        }
+        // Add immediate to A with carry
+        else if (mnemonic == "ADC A,n8") {
+            opcodeTable[opcode] = [this]() { ADC_A_n8(); };
+        }
+        // Reset to 0x08
+        else if (mnemonic == "RST 08H") {
+            opcodeTable[opcode] = [this]() { RST_08H(); };
+        }
+        // Return if no carry
+        else if (mnemonic == "RET NC") {
+            opcodeTable[opcode] = [this]() { RET_NC(); };
+        }
+        // Pop DE from stack
+        else if (mnemonic == "POP DE") {
+            opcodeTable[opcode] = [this]() { POP_DE(); };
+        }
+        // Jump if no carry
+        else if (mnemonic == "JP NC,a16") {
+            opcodeTable[opcode] = [this]() { JP_NC_a16(); };
+        }
+        // Call if no carry
+        else if (mnemonic == "CALL NC,a16") {
+            opcodeTable[opcode] = [this]() { CALL_NC_a16(); };
+        }
+        // Push DE onto stack
+        else if (mnemonic == "PUSH DE") {
+            opcodeTable[opcode] = [this]() { PUSH_DE(); };
+        }
         else {
             std::cerr << "Unknown mnemonic: " << mnemonic << std::endl;
         }
@@ -2535,4 +2615,162 @@ void CPU::RET_NZ() {
     } else {
         m_cycles += 8;
     }
+}
+
+void CPU::POP_BC() {
+    m_registers.bc = pop();
+    m_cycles += 12;
+}
+
+void CPU::JP_NZ_a16() {
+    u16 address = readPC16();
+    if (!getFlag(FLAG_Z)) {
+        m_registers.pc = address;
+        m_cycles += 16;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::JP_a16() {
+    m_registers.pc = readPC16();
+    m_cycles += 16;
+}
+
+void CPU::CALL_NZ_a16() {
+    u16 address = readPC16();
+    if (!getFlag(FLAG_Z)) {
+        push(m_registers.pc);
+        m_registers.pc = address;
+        m_cycles += 24;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::PUSH_BC() {
+    push(m_registers.bc);
+    m_cycles += 16;
+}
+
+void CPU::ADD_A_n8() {
+    u8 value = readPC();
+    u16 result = m_registers.a + value;
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    m_registers.a = result & 0xFF;
+    m_cycles += 8;
+}
+
+void CPU::RST_00H() {
+    push(m_registers.pc);
+    m_registers.pc = 0x0000;
+    m_cycles += 16;
+}
+
+void CPU::RET_Z() {
+    if (getFlag(FLAG_Z)) {
+        m_registers.pc = pop();
+        m_cycles += 20;
+    } else {
+        m_cycles += 8;
+    }
+}
+
+void CPU::RET() {
+    m_registers.pc = pop();
+    m_cycles += 16;
+}
+
+void CPU::JP_Z_a16() {
+    u16 address = readPC16();
+    if (getFlag(FLAG_Z)) {
+        m_registers.pc = address;
+        m_cycles += 16;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::PREFIX_CB() {
+    u8 opcode = readPC();
+    executeCBOpcode(opcode);
+    m_cycles += 4;
+}
+
+void CPU::CALL_Z_a16() {
+    u16 address = readPC16();
+    if (getFlag(FLAG_Z)) {
+        push(m_registers.pc);
+        m_registers.pc = address;
+        m_cycles += 24;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::CALL_a16() {
+    u16 address = readPC16();
+    push(m_registers.pc);
+    m_registers.pc = address;
+    m_cycles += 24;
+}
+
+void CPU::ADC_A_n8() {
+    u8 value = readPC();
+    u16 result = m_registers.a + value + (getFlag(FLAG_C) ? 1 : 0);
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    m_registers.a = result & 0xFF;
+    m_cycles += 8;
+}
+
+void CPU::RST_08H() {
+    push(m_registers.pc);
+    m_registers.pc = 0x0008;
+    m_cycles += 16;
+}
+
+void CPU::RET_NC() {
+    if (!getFlag(FLAG_C)) {
+        m_registers.pc = pop();
+        m_cycles += 20;
+    } else {
+        m_cycles += 8;
+    }
+}
+
+void CPU::POP_DE() {
+    m_registers.de = pop();
+    m_cycles += 12;
+}
+
+void CPU::JP_NC_a16() {
+    u16 address = readPC16();
+    if (!getFlag(FLAG_C)) {
+        m_registers.pc = address;
+        m_cycles += 16;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::CALL_NC_a16() {
+    u16 address = readPC16();
+    if (!getFlag(FLAG_C)) {
+        push(m_registers.pc);
+        m_registers.pc = address;
+        m_cycles += 24;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::PUSH_DE() {
+    push(m_registers.de);
+    m_cycles += 16;
 }

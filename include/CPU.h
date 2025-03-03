@@ -311,4 +311,24 @@ private:
     void CP_HLm();     // 0xBD
     void CP_A();       // 0xBE
     void RET_NZ();     // 0xBF
+    void POP_BC();     // 0xC0
+    void JP_NZ_a16();  // 0xC1
+    void JP_a16();     // 0xC2
+    void CALL_NZ_a16();// 0xC3
+    void PUSH_BC();    // 0xC4
+    void ADD_A_n8();   // 0xC5
+    void RST_00H();    // 0xC6
+    void RET_Z();      // 0xC7
+    void RET();        // 0xC8
+    void JP_Z_a16();   // 0xC9
+    void PREFIX_CB();   // 0xCA
+    void CALL_Z_a16(); // 0xCB
+    void CALL_a16();   // 0xCC
+    void ADC_A_n8();   // 0xCD
+    void RST_08H();    // 0xCE
+    void RET_NC();     // 0xCF
+    void POP_DE();     // 0xD0
+    void JP_NC_a16();  // 0xD1
+    void CALL_NC_a16();// 0xD2
+    void PUSH_DE();    // 0xD3
 };
