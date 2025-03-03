@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameBoy Emulator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+        }
+        
+        #gameboy-screen {
+            width: 320px;
+            height: 288px;
+            image-rendering: pixelated;
+            background-color: #9bbc0f;
+            border: 10px solid #8b8b8b;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameboy-screen" width="160" height="144"></canvas>
+    
+    <script>
+        // GameBoy screen dimensions
+        const SCREEN_WIDTH = 160;
+        const SCREEN_HEIGHT = 144;
+        
+        // Get the canvas and context
+        const canvas = document.getElementById('gameboy-screen');
+        const ctx = canvas.getContext('2d');
+        
+        // Create image data for the screen
+        let imageData = ctx.createImageData(SCREEN_WIDTH, SCREEN_HEIGHT);
+        
+        // Function to update the screen with pixel data
+        function updateScreen(pixelData) {
+            // Convert the pixel data to RGBA format
+            for (let i = 0; i < pixelData.length; i++) {
+                // GameBoy colors (4 shades of green)
+                let color;
+                switch (pixelData[i]) {
+                    case 0: color = [155, 188, 15, 255]; break; // Lightest
+                    case 1: color = [139, 172, 15, 255]; break;
+                    case 2: color = [48, 98, 48, 255]; break;
+                    case 3: color = [15, 56, 15, 255]; break;   // Darkest
+                    default: color = [0, 0, 0, 255]; break;     // Default black
+                }
+                
+                // Set RGBA values in the image data
+                imageData.data[i * 4] = color[0];     // R
+                imageData.data[i * 4 + 1] = color[1]; // G
+                imageData.data[i * 4 + 2] = color[2]; // B
+                imageData.data[i * 4 + 3] = color[3]; // A
+            }
+            
+            // Put the image data on the canvas
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        // Listen for messages from the C++ application
+        window.chrome.webview.addEventListener('message', event => {
+            if (event.data && event.data.type === 'screenUpdate') {
+                updateScreen(event.data.pixels);
+            }
+        });
+        
+        // Signal that the page is ready
+        window.chrome.webview.postMessage({ type: 'ready' });
+    </script>
+</body>
+</html> 
