@@ -61,7 +61,7 @@ bool MainWindow::create(HINSTANCE hInstance, int nCmdShow) {
     }
 
     // Create window
-    m_hwnd = CreateWindowEx(
+    m_hwnd = CreateWindowExW(
         0,                              // Optional window styles
         CLASS_NAME,                     // Window class
         L"GameBoy Emulator",               // Window text
@@ -78,21 +78,21 @@ bool MainWindow::create(HINSTANCE hInstance, int nCmdShow) {
     }
     
     // Create menu
-    HMENU hMenu = CreateMenu();
-    HMENU hFileMenu = CreatePopupMenu();
-    HMENU hEmulationMenu = CreatePopupMenu();
+    // HMENU hMenu = CreateMenu();
+    // HMENU hFileMenu = CreatePopupMenu();
+    // HMENU hEmulationMenu = CreatePopupMenu();
     
-    AppendMenuW(hFileMenu, MF_STRING, ID_FILE_OPEN, L"&Open ROM...");
-    AppendMenuW(hFileMenu, MF_STRING, ID_FILE_RESET, L"&Reset");
-    AppendMenuW(hFileMenu, MF_SEPARATOR, 0, nullptr);
-    AppendMenuW(hFileMenu, MF_STRING, ID_FILE_EXIT, L"&Exit");
+    // AppendMenuW(hFileMenu, MF_STRING, ID_FILE_OPEN, L"&Open ROM...");
+    // AppendMenuW(hFileMenu, MF_STRING, ID_FILE_RESET, L"&Reset");
+    // AppendMenuW(hFileMenu, MF_SEPARATOR, 0, nullptr);
+    // AppendMenuW(hFileMenu, MF_STRING, ID_FILE_EXIT, L"&Exit");
     
-    AppendMenuW(hEmulationMenu, MF_STRING, ID_EMULATION_PAUSE, L"&Pause");
+    // AppendMenuW(hEmulationMenu, MF_STRING, ID_EMULATION_PAUSE, L"&Pause");
     
-    AppendMenuW(hMenu, MF_POPUP, (UINT_PTR)hFileMenu, L"&File");
-    AppendMenuW(hMenu, MF_POPUP, (UINT_PTR)hEmulationMenu, L"&Emulation");
+    // AppendMenuW(hMenu, MF_POPUP, (UINT_PTR)hFileMenu, L"&File");
+    // AppendMenuW(hMenu, MF_POPUP, (UINT_PTR)hEmulationMenu, L"&Emulation");
     
-    SetMenu(m_hwnd, hMenu);
+    // SetMenu(m_hwnd, hMenu);
     
     // Show window
     ShowWindow(m_hwnd, nCmdShow);
@@ -200,14 +200,17 @@ LRESULT CALLBACK MainWindow::windowProc(HWND hwnd, UINT message, WPARAM wParam, 
         CREATESTRUCT* cs = reinterpret_cast<CREATESTRUCT*>(lParam);
         window = reinterpret_cast<MainWindow*>(cs->lpCreateParams);
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
-    } else {
-        window = reinterpret_cast<MainWindow*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
     }
+    // } else {
+    //     window = reinterpret_cast<MainWindow*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+    // }
 
     // Call instance window procedure
-    if (window) {
-        return window->handleMessage(message, wParam, lParam);
-    }
+    // if (window) {
+    //     return window->handleMessage(message, wParam, lParam);
+    // }
+
+    MainWindow::getInstance().handleMessage(message, wParam, lParam);
 
     return DefWindowProc(hwnd, message, wParam, lParam);
 }
@@ -247,6 +250,12 @@ LRESULT MainWindow::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
 void MainWindow::onCreate() {
     // Initialize emulator
     Emulator::getInstance().initialize(m_hwnd);
+    onFileOpen();
+    if (Emulator::getInstance().isPaused()) {
+        Emulator::getInstance().togglePause();
+    }
+
+    
 }
 
 // On destroy
@@ -307,6 +316,11 @@ void MainWindow::onFileOpen() {
     if (Emulator::getInstance().loadROM(filename)) {
         // Set window title
         setTitle("GameBoy Emulator - " + filename);
+    }
+    else {
+        // Show error message
+        MessageBoxW(m_hwnd, L"Failed to load ROM", L"Error", MB_OK | MB_ICONERROR);
+        exit(1);
     }
 }
 
