@@ -2150,4 +2150,297 @@ void CPU::RST_00H() {
     m_cycles += 16;
 }
 
+void CPU::RET_Z() {
+    if (getFlag(FLAG_Z)) {
+        m_registers.pc = pop();
+        m_cycles += 20;
+    } else {
+        m_cycles += 8;
+    }
+}
+
+void CPU::RET() {
+    m_registers.pc = pop();
+    m_cycles += 16;
+}
+
+void CPU::JP_Z_a16() {
+    u16 address = readPC16();
+    
+    if (getFlag(FLAG_Z)) {
+        m_registers.pc = address;
+        m_cycles += 16;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::PREFIX_CB() {
+    u8 opcode = readPC();
+    executeCBOpcode(opcode);
+    m_cycles += 4;
+}
+
+void CPU::CALL_Z_a16() {
+    u16 address = readPC16();
+    
+    if (getFlag(FLAG_Z)) {
+        push(m_registers.pc);
+        m_registers.pc = address;
+        m_cycles += 24;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::CALL_a16() {
+    u16 address = readPC16();
+    push(m_registers.pc);
+    m_registers.pc = address;
+    m_cycles += 24;
+}
+
+void CPU::ADC_A_n8() {
+    u8 value = readPC();
+    u16 result = m_registers.a + value + (getFlag(FLAG_C) ? 1 : 0);
+    
+    setFlag(FLAG_Z, (result & 0xFF) == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) + (value & 0x0F) + (getFlag(FLAG_C) ? 1 : 0) > 0x0F);
+    setFlag(FLAG_C, result > 0xFF);
+    
+    m_registers.a = result & 0xFF;
+    m_cycles += 8;
+}
+
+void CPU::RST_08H() {
+    push(m_registers.pc);
+    m_registers.pc = 0x0008;
+    m_cycles += 16;
+}
+
+void CPU::RET_NC() {
+    if (!getFlag(FLAG_C)) {
+        m_registers.pc = pop();
+        m_cycles += 20;
+    } else {
+        m_cycles += 8;
+    }
+}
+
+void CPU::POP_DE() {
+    m_registers.de = pop();
+    m_cycles += 12;
+}
+
+void CPU::JP_NC_a16() {
+    u16 address = readPC16();
+    
+    if (!getFlag(FLAG_C)) {
+        m_registers.pc = address;
+        m_cycles += 16;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::CALL_NC_a16() {
+    u16 address = readPC16();
+    
+    if (!getFlag(FLAG_C)) {
+        push(m_registers.pc);
+        m_registers.pc = address;
+        m_cycles += 24;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::PUSH_DE() {
+    push(m_registers.de);
+    m_cycles += 16;
+}
+
+void CPU::SUB_n8() {
+    u8 value = readPC();
+    u8 result = m_registers.a - value;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F));
+    setFlag(FLAG_C, m_registers.a < value);
+    
+    m_registers.a = result;
+    m_cycles += 8;
+}
+
+void CPU::RST_10H() {
+    push(m_registers.pc);
+    m_registers.pc = 0x0010;
+    m_cycles += 16;
+}
+
+void CPU::RET_C() {
+    if (getFlag(FLAG_C)) {
+        m_registers.pc = pop();
+        m_cycles += 20;
+    } else {
+        m_cycles += 8;
+    }
+}
+
+void CPU::RETI() {
+    m_registers.pc = pop();
+    m_interruptsEnabled = true;
+    m_cycles += 16;
+}
+
+void CPU::JP_C_a16() {
+    u16 address = readPC16();
+    
+    if (getFlag(FLAG_C)) {
+        m_registers.pc = address;
+        m_cycles += 16;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::CALL_C_a16() {
+    u16 address = readPC16();
+    
+    if (getFlag(FLAG_C)) {
+        push(m_registers.pc);
+        m_registers.pc = address;
+        m_cycles += 24;
+    } else {
+        m_cycles += 12;
+    }
+}
+
+void CPU::SBC_A_n8() {
+    u8 value = readPC();
+    u8 carry = getFlag(FLAG_C) ? 1 : 0;
+    u8 result = m_registers.a - value - carry;
+    
+    setFlag(FLAG_Z, result == 0);
+    setFlag(FLAG_N, true);
+    setFlag(FLAG_H, (m_registers.a & 0x0F) < (value & 0x0F) + carry);
+    setFlag(FLAG_C, m_registers.a < value + carry);
+    
+    m_registers.a = result;
+    m_cycles += 8;
+}
+
+void CPU::RST_18H() {
+    push(m_registers.pc);
+    m_registers.pc = 0x0018;
+    m_cycles += 16;
+}
+
+void CPU::LDH_a8_A() {
+    u8 offset = readPC();
+    m_memory.write(0xFF00 + offset, m_registers.a);
+    m_cycles += 12;
+}
+
+void CPU::POP_HL() {
+    m_registers.hl = pop();
+    m_cycles += 12;
+}
+
+void CPU::LD_C_A() {
+    m_memory.write(0xFF00 + m_registers.c, m_registers.a);
+    m_cycles += 8;
+}
+
+void CPU::PUSH_HL() {
+    push(m_registers.hl);
+    m_cycles += 16;
+}
+
+void CPU::AND_n8() {
+    m_registers.a &= readPC();
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::RST_20H() {
+    push(m_registers.pc);
+    m_registers.pc = 0x0020;
+    m_cycles += 16;
+}
+
+void CPU::ADD_SP_e8() {
+    s8 value = static_cast<s8>(readPC());
+    u32 result = m_registers.sp + value;
+    
+    setFlag(FLAG_Z, false);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, (m_registers.sp & 0x0F) + (value & 0x0F) > 0x0F);
+    setFlag(FLAG_C, (m_registers.sp & 0xFF) + (value & 0xFF) > 0xFF);
+    
+    m_registers.sp = result & 0xFFFF;
+    m_cycles += 16;
+}
+
+void CPU::JP_HL() {
+    m_registers.pc = m_registers.hl;
+    m_cycles += 4;
+}
+
+void CPU::LD_a16_A() {
+    u16 address = readPC16();
+    m_memory.write(address, m_registers.a);
+    m_cycles += 16;
+}
+
+void CPU::XOR_n8() {
+    m_registers.a ^= readPC();
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::RST_28H() {
+    push(m_registers.pc);
+    m_registers.pc = 0x0028;
+    m_cycles += 16;
+}
+
+void CPU::LDH_A_a8() {
+    u8 offset = readPC();
+    m_registers.a = m_memory.read(0xFF00 + offset);
+    m_cycles += 12;
+}
+
+void CPU::POP_AF() {
+    m_registers.af = pop() & 0xFFF0;  // Lower 4 bits of F are always 0
+    m_cycles += 12;
+}
+
+void CPU::LD_A_C() {
+    m_registers.a = m_memory.read(0xFF00 + m_registers.c);
+    m_cycles += 8;
+}
+
+void CPU::DI() {
+    m_interruptsEnabled = false;
+    m_cycles += 4;
+}
+
+void CPU::PUSH_AF() {
+    push(m_registers.af);
+    m_cycles += 16;
+}
+
 

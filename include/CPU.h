@@ -319,5 +319,42 @@ private:
     void PUSH_BC();     // 0xC5
     void ADD_A_n8();    // 0xC6
     void RST_00H();     // 0xC7
+    void RET_Z();       // 0xC8
+    void RET();         // 0xC9
+    void JP_Z_a16();    // 0xCA
+    void PREFIX_CB();   // 0xCB
+    void CALL_Z_a16();  // 0xCC
+    void CALL_a16();    // 0xCD
+    void ADC_A_n8();    // 0xCE
+    void RST_08H();     // 0xCF
+    void RET_NC();      // 0xD0
+    void POP_DE();      // 0xD1
+    void JP_NC_a16();   // 0xD2
+    void CALL_NC_a16(); // 0xD4
+    void PUSH_DE();     // 0xD5
+    void SUB_n8();      // 0xD6
+    void RST_10H();     // 0xD7
+    void RET_C();       // 0xD8
+    void RETI();        // 0xD9
+    void JP_C_a16();    // 0xDA
+    void CALL_C_a16();  // 0xDC
+    void SBC_A_n8();    // 0xDE
+    void RST_18H();     // 0xDF
+    void LDH_a8_A();    // 0xE0
+    void POP_HL();      // 0xE1
+    void LD_C_A();      // 0xE2
+    void PUSH_HL();     // 0xE5
+    void AND_n8();      // 0xE6
+    void RST_20H();     // 0xE7
+    void ADD_SP_e8();   // 0xE8
+    void JP_HL();       // 0xE9
+    void LD_a16_A();    // 0xEA
+    void XOR_n8();      // 0xEE
+    void RST_28H();     // 0xEF
+    void LDH_A_a8();    // 0xF0
+    void POP_AF();      // 0xF1
+    void LD_A_C();      // 0xF2
+    void DI();          // 0xF3
+    void PUSH_AF();     // 0xF5
     
 };
