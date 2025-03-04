@@ -4168,3 +4168,480 @@ void CPU::BIT_4_A() {
     
     m_cycles += 8;
 }
+
+void CPU::BIT_5_B() {
+    setFlag(FLAG_Z, !(m_registers.b & 0x20));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_5_C() {
+    setFlag(FLAG_Z, !(m_registers.c & 0x20));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_5_D() {
+    setFlag(FLAG_Z, !(m_registers.d & 0x20));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_5_E() {
+    setFlag(FLAG_Z, !(m_registers.e & 0x20));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_5_H() {
+    setFlag(FLAG_Z, !(m_registers.h & 0x20));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_5_L() {
+    setFlag(FLAG_Z, !(m_registers.l & 0x20));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_5_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, !(value & 0x20));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 12;
+}
+
+void CPU::BIT_5_A() {
+    setFlag(FLAG_Z, !(m_registers.a & 0x20));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_6_B() {
+    setFlag(FLAG_Z, !(m_registers.b & 0x40));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_6_C() {
+    setFlag(FLAG_Z, !(m_registers.c & 0x40));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_6_D() {
+    setFlag(FLAG_Z, !(m_registers.d & 0x40));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_6_E() {
+    setFlag(FLAG_Z, !(m_registers.e & 0x40));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_6_H() {
+    setFlag(FLAG_Z, !(m_registers.h & 0x40));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_6_L() {
+    setFlag(FLAG_Z, !(m_registers.l & 0x40));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_6_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, !(value & 0x40));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 12;
+}
+
+void CPU::BIT_6_A() {
+    setFlag(FLAG_Z, !(m_registers.a & 0x40));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_7_B() {
+    setFlag(FLAG_Z, !(m_registers.b & 0x80));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_7_C() {
+    setFlag(FLAG_Z, !(m_registers.c & 0x80));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_7_D() {
+    setFlag(FLAG_Z, !(m_registers.d & 0x80));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_7_E() {
+    setFlag(FLAG_Z, !(m_registers.e & 0x80));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_7_H() {
+    setFlag(FLAG_Z, !(m_registers.h & 0x80));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_7_L() {
+    setFlag(FLAG_Z, !(m_registers.l & 0x80));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_7_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, !(value & 0x80));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 12;
+}
+
+void CPU::BIT_7_A() {
+    setFlag(FLAG_Z, !(m_registers.a & 0x80));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::RES_0_B() {
+    m_registers.b &= ~0x01;
+    m_cycles += 8;
+}
+
+void CPU::RES_0_C() {
+    m_registers.c &= ~0x01;
+    m_cycles += 8;
+}
+
+void CPU::RES_0_D() {
+    m_registers.d &= ~0x01;
+    m_cycles += 8;
+}
+
+void CPU::RES_0_E() {
+    m_registers.e &= ~0x01;
+    m_cycles += 8;
+}
+
+void CPU::RES_0_H() {
+    m_registers.h &= ~0x01;
+    m_cycles += 8;
+}
+
+void CPU::RES_0_L() {
+    m_registers.l &= ~0x01;
+    m_cycles += 8;
+}
+
+void CPU::RES_0_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    value &= ~0x01;
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RES_0_A() {
+    m_registers.a &= ~0x01;
+    m_cycles += 8;
+}
+
+void CPU::RES_1_B() {
+    m_registers.b &= ~0x02;
+    m_cycles += 8;
+}
+
+void CPU::RES_1_C() {
+    m_registers.c &= ~0x02;
+    m_cycles += 8;
+}
+
+void CPU::RES_1_D() {
+    m_registers.d &= ~0x02;
+    m_cycles += 8;
+}
+
+void CPU::RES_1_E() {
+    m_registers.e &= ~0x02;
+    m_cycles += 8;
+}
+
+void CPU::RES_1_H() {
+    m_registers.h &= ~0x02;
+    m_cycles += 8;
+}
+
+void CPU::RES_1_L() {
+    m_registers.l &= ~0x02;
+    m_cycles += 8;
+}
+
+void CPU::RES_1_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    value &= ~0x02;
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RES_1_A() {
+    m_registers.a &= ~0x02;
+    m_cycles += 8;
+}
+
+void CPU::RES_2_B() {
+    m_registers.b &= ~0x04;
+    m_cycles += 8;
+}
+
+void CPU::RES_2_C() {
+    m_registers.c &= ~0x04;
+    m_cycles += 8;
+}
+
+void CPU::RES_2_D() {
+    m_registers.d &= ~0x04;
+    m_cycles += 8;
+}
+
+void CPU::RES_2_E() {
+    m_registers.e &= ~0x04;
+    m_cycles += 8;
+}
+
+void CPU::RES_2_H() {
+    m_registers.h &= ~0x04;
+    m_cycles += 8;
+}
+
+void CPU::RES_2_L() {
+    m_registers.l &= ~0x04;
+    m_cycles += 8;
+}
+
+void CPU::RES_2_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    value &= ~0x04;
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RES_2_A() {
+    m_registers.a &= ~0x04;
+    m_cycles += 8;
+}
+
+void CPU::RES_3_B() {
+    m_registers.b &= ~0x08;
+    m_cycles += 8;
+}
+
+void CPU::RES_3_C() {
+    m_registers.c &= ~0x08;
+    m_cycles += 8;
+}
+
+void CPU::RES_3_D() {
+    m_registers.d &= ~0x08;
+    m_cycles += 8;
+}
+
+void CPU::RES_3_E() {
+    m_registers.e &= ~0x08;
+    m_cycles += 8;
+}
+
+void CPU::RES_3_H() {
+    m_registers.h &= ~0x08;
+    m_cycles += 8;
+}
+
+void CPU::RES_3_L() {
+    m_registers.l &= ~0x08;
+    m_cycles += 8;
+}
+
+void CPU::RES_3_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    value &= ~0x08;
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RES_3_A() {
+    m_registers.a &= ~0x08;
+    m_cycles += 8;
+}
+
+void CPU::RES_4_B() {
+    m_registers.b &= ~0x10;
+    m_cycles += 8;
+}
+
+void CPU::RES_4_C() {
+    m_registers.c &= ~0x10;
+    m_cycles += 8;
+}
+
+void CPU::RES_4_D() {
+    m_registers.d &= ~0x10;
+    m_cycles += 8;
+}
+
+void CPU::RES_4_E() {
+    m_registers.e &= ~0x10;
+    m_cycles += 8;
+}
+
+void CPU::RES_4_H() {
+    m_registers.h &= ~0x10;
+    m_cycles += 8;
+}
+
+void CPU::RES_4_L() {
+    m_registers.l &= ~0x10;
+    m_cycles += 8;
+}
+
+void CPU::RES_4_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    value &= ~0x10;
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RES_4_A() {
+    m_registers.a &= ~0x10;
+    m_cycles += 8;
+}
+
+void CPU::RES_5_B() {
+    m_registers.b &= ~0x20;
+    m_cycles += 8;
+}
+
+void CPU::RES_5_C() {
+    m_registers.c &= ~0x20;
+    m_cycles += 8;
+}
+
+void CPU::RES_5_D() {
+    m_registers.d &= ~0x20;
+    m_cycles += 8;
+}
+
+void CPU::RES_5_E() {
+    m_registers.e &= ~0x20;
+    m_cycles += 8;
+}
+
+void CPU::RES_5_H() {
+    m_registers.h &= ~0x20;
+    m_cycles += 8;
+}
+
+void CPU::RES_5_L() {
+    m_registers.l &= ~0x20;
+    m_cycles += 8;
+}
+
+void CPU::RES_5_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    value &= ~0x20;
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RES_5_A() {
+    m_registers.a &= ~0x20;
+    m_cycles += 8;
+}
+
+void CPU::RES_6_B() {
+    m_registers.b &= ~0x40;
+    m_cycles += 8;
+}
+
+void CPU::RES_6_C() {
+    m_registers.c &= ~0x40;
+    m_cycles += 8;
+}
+
+void CPU::RES_6_D() {
+    m_registers.d &= ~0x40;
+    m_cycles += 8;
+}
+
+void CPU::RES_6_E() {
+    m_registers.e &= ~0x40;
+    m_cycles += 8;
+}
+
+void CPU::RES_6_H() {
+    m_registers.h &= ~0x40;
+    m_cycles += 8;
+}
+
+void CPU::RES_6_L() {
+    m_registers.l &= ~0x40;
+    m_cycles += 8;
+}
