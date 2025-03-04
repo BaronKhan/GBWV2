@@ -3615,3 +3615,556 @@ void CPU::SRA_H() {
     m_cycles += 8;
 }
 
+void CPU::SRA_L() {
+    bool carry = (m_registers.l & 0x01) != 0;
+    bool msb = (m_registers.l & 0x80) != 0;
+    m_registers.l = (m_registers.l >> 1) | (msb ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.l == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRA_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    bool carry = (value & 0x01) != 0;
+    bool msb = (value & 0x80) != 0;
+    value = (value >> 1) | (msb ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, value == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::SRA_A() {
+    bool carry = (m_registers.a & 0x01) != 0;
+    bool msb = (m_registers.a & 0x80) != 0;
+    m_registers.a = (m_registers.a >> 1) | (msb ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SWAP_B() {
+    m_registers.b = ((m_registers.b & 0x0F) << 4) | ((m_registers.b & 0xF0) >> 4);
+    
+    setFlag(FLAG_Z, m_registers.b == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::SWAP_C() {
+    m_registers.c = ((m_registers.c & 0x0F) << 4) | ((m_registers.c & 0xF0) >> 4);
+    
+    setFlag(FLAG_Z, m_registers.c == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::SWAP_D() {
+    m_registers.d = ((m_registers.d & 0x0F) << 4) | ((m_registers.d & 0xF0) >> 4);
+    
+    setFlag(FLAG_Z, m_registers.d == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::SWAP_E() {
+    m_registers.e = ((m_registers.e & 0x0F) << 4) | ((m_registers.e & 0xF0) >> 4);
+    
+    setFlag(FLAG_Z, m_registers.e == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::SWAP_H() {
+    m_registers.h = ((m_registers.h & 0x0F) << 4) | ((m_registers.h & 0xF0) >> 4);
+    
+    setFlag(FLAG_Z, m_registers.h == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::SWAP_L() {
+    m_registers.l = ((m_registers.l & 0x0F) << 4) | ((m_registers.l & 0xF0) >> 4);
+    
+    setFlag(FLAG_Z, m_registers.l == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::SWAP_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    value = ((value & 0x0F) << 4) | ((value & 0xF0) >> 4);
+    
+    setFlag(FLAG_Z, value == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::SWAP_A() {
+    m_registers.a = ((m_registers.a & 0x0F) << 4) | ((m_registers.a & 0xF0) >> 4);
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, false);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRL_B() {
+    bool carry = (m_registers.b & 0x01) != 0;
+    m_registers.b = m_registers.b >> 1;
+    
+    setFlag(FLAG_Z, m_registers.b == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRL_C() {
+    bool carry = (m_registers.c & 0x01) != 0;
+    m_registers.c = m_registers.c >> 1;
+    
+    setFlag(FLAG_Z, m_registers.c == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRL_D() {
+    bool carry = (m_registers.d & 0x01) != 0;
+    m_registers.d = m_registers.d >> 1;
+    
+    setFlag(FLAG_Z, m_registers.d == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRL_E() {
+    bool carry = (m_registers.e & 0x01) != 0;
+    m_registers.e = m_registers.e >> 1;
+    
+    setFlag(FLAG_Z, m_registers.e == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRL_H() {
+    bool carry = (m_registers.h & 0x01) != 0;
+    m_registers.h = m_registers.h >> 1;
+    
+    setFlag(FLAG_Z, m_registers.h == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRL_L() {
+    bool carry = (m_registers.l & 0x01) != 0;
+    m_registers.l = m_registers.l >> 1;
+    
+    setFlag(FLAG_Z, m_registers.l == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRL_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    bool carry = (value & 0x01) != 0;
+    value = value >> 1;
+    
+    setFlag(FLAG_Z, value == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::SRL_A() {
+    bool carry = (m_registers.a & 0x01) != 0;
+    m_registers.a = m_registers.a >> 1;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_0_B() {
+    setFlag(FLAG_Z, !(m_registers.b & 0x01));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_0_C() {
+    setFlag(FLAG_Z, !(m_registers.c & 0x01));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_0_D() {
+    setFlag(FLAG_Z, !(m_registers.d & 0x01));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_0_E() {
+    setFlag(FLAG_Z, !(m_registers.e & 0x01));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_0_H() {
+    setFlag(FLAG_Z, !(m_registers.h & 0x01));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_0_L() {
+    setFlag(FLAG_Z, !(m_registers.l & 0x01));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_0_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, !(value & 0x01));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 12;
+}
+
+void CPU::BIT_0_A() {
+    setFlag(FLAG_Z, !(m_registers.a & 0x01));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_1_B() {
+    setFlag(FLAG_Z, !(m_registers.b & 0x02));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_1_C() {
+    setFlag(FLAG_Z, !(m_registers.c & 0x02));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_1_D() {
+    setFlag(FLAG_Z, !(m_registers.d & 0x02));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_1_E() {
+    setFlag(FLAG_Z, !(m_registers.e & 0x02));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_1_H() {
+    setFlag(FLAG_Z, !(m_registers.h & 0x02));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_1_L() {
+    setFlag(FLAG_Z, !(m_registers.l & 0x02));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_1_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, !(value & 0x02));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 12;
+}
+
+void CPU::BIT_1_A() {
+    setFlag(FLAG_Z, !(m_registers.a & 0x02));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_2_B() {
+    setFlag(FLAG_Z, !(m_registers.b & 0x04));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_2_C() {
+    setFlag(FLAG_Z, !(m_registers.c & 0x04));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_2_D() {
+    setFlag(FLAG_Z, !(m_registers.d & 0x04));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_2_E() {
+    setFlag(FLAG_Z, !(m_registers.e & 0x04));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_2_H() {
+    setFlag(FLAG_Z, !(m_registers.h & 0x04));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_2_L() {
+    setFlag(FLAG_Z, !(m_registers.l & 0x04));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_2_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, !(value & 0x04));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 12;
+}
+
+void CPU::BIT_2_A() {
+    setFlag(FLAG_Z, !(m_registers.a & 0x04));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_3_B() {
+    setFlag(FLAG_Z, !(m_registers.b & 0x08));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_3_C() {
+    setFlag(FLAG_Z, !(m_registers.c & 0x08));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_3_D() {
+    setFlag(FLAG_Z, !(m_registers.d & 0x08));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_3_E() {
+    setFlag(FLAG_Z, !(m_registers.e & 0x08));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_3_H() {
+    setFlag(FLAG_Z, !(m_registers.h & 0x08));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_3_L() {
+    setFlag(FLAG_Z, !(m_registers.l & 0x08));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_3_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, !(value & 0x08));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 12;
+}
+
+void CPU::BIT_3_A() {
+    setFlag(FLAG_Z, !(m_registers.a & 0x08));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_4_B() {
+    setFlag(FLAG_Z, !(m_registers.b & 0x10));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_4_C() {
+    setFlag(FLAG_Z, !(m_registers.c & 0x10));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_4_D() {
+    setFlag(FLAG_Z, !(m_registers.d & 0x10));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_4_E() {
+    setFlag(FLAG_Z, !(m_registers.e & 0x10));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_4_H() {
+    setFlag(FLAG_Z, !(m_registers.h & 0x10));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_4_L() {
+    setFlag(FLAG_Z, !(m_registers.l & 0x10));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
+
+void CPU::BIT_4_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    setFlag(FLAG_Z, !(value & 0x10));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 12;
+}
+
+void CPU::BIT_4_A() {
+    setFlag(FLAG_Z, !(m_registers.a & 0x10));
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, true);
+    
+    m_cycles += 8;
+}
