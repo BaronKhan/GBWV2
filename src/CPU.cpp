@@ -3104,4 +3104,514 @@ void CPU::RLC_H() {
     m_cycles += 8;
 }
 
+void CPU::RLC_L() {
+    bool carry = (m_registers.l & 0x80) != 0;
+    m_registers.l = (m_registers.l << 1) | (carry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.l == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RLC_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    bool carry = (value & 0x80) != 0;
+    value = (value << 1) | (carry ? 1 : 0);
+    
+    setFlag(FLAG_Z, value == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RLC_A() {
+    bool carry = (m_registers.a & 0x80) != 0;
+    m_registers.a = (m_registers.a << 1) | (carry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RRC_B() {
+    bool carry = (m_registers.b & 0x01) != 0;
+    m_registers.b = (m_registers.b >> 1) | (carry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.b == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RRC_C() {
+    bool carry = (m_registers.c & 0x01) != 0;
+    m_registers.c = (m_registers.c >> 1) | (carry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.c == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RRC_D() {
+    bool carry = (m_registers.d & 0x01) != 0;
+    m_registers.d = (m_registers.d >> 1) | (carry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.d == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RRC_E() {
+    bool carry = (m_registers.e & 0x01) != 0;
+    m_registers.e = (m_registers.e >> 1) | (carry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.e == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RRC_H() {
+    bool carry = (m_registers.h & 0x01) != 0;
+    m_registers.h = (m_registers.h >> 1) | (carry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.h == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RRC_L() {
+    bool carry = (m_registers.l & 0x01) != 0;
+    m_registers.l = (m_registers.l >> 1) | (carry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.l == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RRC_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    bool carry = (value & 0x01) != 0;
+    value = (value >> 1) | (carry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, value == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RRC_A() {
+    bool carry = (m_registers.a & 0x01) != 0;
+    m_registers.a = (m_registers.a >> 1) | (carry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RL_B() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.b & 0x80) != 0;
+    m_registers.b = (m_registers.b << 1) | (oldCarry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.b == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RL_C() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.c & 0x80) != 0;
+    m_registers.c = (m_registers.c << 1) | (oldCarry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.c == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RL_D() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.d & 0x80) != 0;
+    m_registers.d = (m_registers.d << 1) | (oldCarry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.d == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RL_E() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.e & 0x80) != 0;
+    m_registers.e = (m_registers.e << 1) | (oldCarry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.e == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RL_H() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.h & 0x80) != 0;
+    m_registers.h = (m_registers.h << 1) | (oldCarry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.h == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RL_L() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.l & 0x80) != 0;
+    m_registers.l = (m_registers.l << 1) | (oldCarry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.l == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RL_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (value & 0x80) != 0;
+    value = (value << 1) | (oldCarry ? 1 : 0);
+    
+    setFlag(FLAG_Z, value == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RL_A() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.a & 0x80) != 0;
+    m_registers.a = (m_registers.a << 1) | (oldCarry ? 1 : 0);
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RR_B() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.b & 0x01) != 0;
+    m_registers.b = (m_registers.b >> 1) | (oldCarry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.b == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RR_C() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.c & 0x01) != 0;
+    m_registers.c = (m_registers.c >> 1) | (oldCarry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.c == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RR_D() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.d & 0x01) != 0;
+    m_registers.d = (m_registers.d >> 1) | (oldCarry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.d == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RR_E() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.e & 0x01) != 0;
+    m_registers.e = (m_registers.e >> 1) | (oldCarry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.e == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RR_H() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.h & 0x01) != 0;
+    m_registers.h = (m_registers.h >> 1) | (oldCarry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.h == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RR_L() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.l & 0x01) != 0;
+    m_registers.l = (m_registers.l >> 1) | (oldCarry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.l == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::RR_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (value & 0x01) != 0;
+    value = (value >> 1) | (oldCarry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, value == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::RR_A() {
+    bool oldCarry = getFlag(FLAG_C);
+    bool newCarry = (m_registers.a & 0x01) != 0;
+    m_registers.a = (m_registers.a >> 1) | (oldCarry ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, newCarry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SLA_B() {
+    bool carry = (m_registers.b & 0x80) != 0;
+    m_registers.b = m_registers.b << 1;
+    
+    setFlag(FLAG_Z, m_registers.b == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SLA_C() {
+    bool carry = (m_registers.c & 0x80) != 0;
+    m_registers.c = m_registers.c << 1;
+    
+    setFlag(FLAG_Z, m_registers.c == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SLA_D() {
+    bool carry = (m_registers.d & 0x80) != 0;
+    m_registers.d = m_registers.d << 1;
+    
+    setFlag(FLAG_Z, m_registers.d == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SLA_E() {
+    bool carry = (m_registers.e & 0x80) != 0;
+    m_registers.e = m_registers.e << 1;
+    
+    setFlag(FLAG_Z, m_registers.e == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SLA_H() {
+    bool carry = (m_registers.h & 0x80) != 0;
+    m_registers.h = m_registers.h << 1;
+    
+    setFlag(FLAG_Z, m_registers.h == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SLA_L() {
+    bool carry = (m_registers.l & 0x80) != 0;
+    m_registers.l = m_registers.l << 1;
+    
+    setFlag(FLAG_Z, m_registers.l == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SLA_HLm() {
+    u8 value = m_memory.read(m_registers.hl);
+    bool carry = (value & 0x80) != 0;
+    value = value << 1;
+    
+    setFlag(FLAG_Z, value == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_memory.write(m_registers.hl, value);
+    m_cycles += 16;
+}
+
+void CPU::SLA_A() {
+    bool carry = (m_registers.a & 0x80) != 0;
+    m_registers.a = m_registers.a << 1;
+    
+    setFlag(FLAG_Z, m_registers.a == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRA_B() {
+    bool carry = (m_registers.b & 0x01) != 0;
+    bool msb = (m_registers.b & 0x80) != 0;
+    m_registers.b = (m_registers.b >> 1) | (msb ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.b == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRA_C() {
+    bool carry = (m_registers.c & 0x01) != 0;
+    bool msb = (m_registers.c & 0x80) != 0;
+    m_registers.c = (m_registers.c >> 1) | (msb ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.c == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRA_D() {
+    bool carry = (m_registers.d & 0x01) != 0;
+    bool msb = (m_registers.d & 0x80) != 0;
+    m_registers.d = (m_registers.d >> 1) | (msb ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.d == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRA_E() {
+    bool carry = (m_registers.e & 0x01) != 0;
+    bool msb = (m_registers.e & 0x80) != 0;
+    m_registers.e = (m_registers.e >> 1) | (msb ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.e == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
+
+void CPU::SRA_H() {
+    bool carry = (m_registers.h & 0x01) != 0;
+    bool msb = (m_registers.h & 0x80) != 0;
+    m_registers.h = (m_registers.h >> 1) | (msb ? 0x80 : 0);
+    
+    setFlag(FLAG_Z, m_registers.h == 0);
+    setFlag(FLAG_N, false);
+    setFlag(FLAG_H, false);
+    setFlag(FLAG_C, carry);
+    
+    m_cycles += 8;
+}
 
