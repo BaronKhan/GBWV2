@@ -948,7 +948,778 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
     }
     // CB-prefixed opcodes
     else {
+        if (mnemonic == "RLC B") {
+            opcodeTable[opcode] = [this]() { RLC_B(); };
+        }
+        else if (mnemonic == "RLC C") {
+            opcodeTable[opcode] = [this]() { RLC_C(); };
+        }
+        else if (mnemonic == "RLC D") {
+            opcodeTable[opcode] = [this]() { RLC_D(); };
+        }
+        else if (mnemonic == "RLC E") {
+            opcodeTable[opcode] = [this]() { RLC_E(); };
+        }
+        else if (mnemonic == "RLC H") {
+            opcodeTable[opcode] = [this]() { RLC_H(); };
+        }
+        else if (mnemonic == "RLC L") {
+            opcodeTable[opcode] = [this]() { RLC_L(); };
+        }
+        else if (mnemonic == "RLC (HL)") {
+            opcodeTable[opcode] = [this]() { RLC_HLm(); };
+        }
+        else if (mnemonic == "RLC A") {
+            opcodeTable[opcode] = [this]() { RLC_A(); };
+        }
+        else if (mnemonic == "RRC B") {
+            opcodeTable[opcode] = [this]() { RRC_B(); };
+        }
+        else if (mnemonic == "RRC C") {
+            opcodeTable[opcode] = [this]() { RRC_C(); };
+        }
+        else if (mnemonic == "RRC D") {
+            opcodeTable[opcode] = [this]() { RRC_D(); };
+        }
+        else if (mnemonic == "RRC E") {
+            opcodeTable[opcode] = [this]() { RRC_E(); };
+        }
+        else if (mnemonic == "RRC H") {
+            opcodeTable[opcode] = [this]() { RRC_H(); };
+        }
+        else if (mnemonic == "RRC L") {
+            opcodeTable[opcode] = [this]() { RRC_L(); };
+        }
+        else if (mnemonic == "RRC (HL)") {
+            opcodeTable[opcode] = [this]() { RRC_HLm(); };
+        }
+        else if (mnemonic == "RRC A") {
+            opcodeTable[opcode] = [this]() { RRC_A(); };
+        }
+        else if (mnemonic == "RL B") {
+            opcodeTable[opcode] = [this]() { RL_B(); };
+        }
+        else if (mnemonic == "RL C") {
+            opcodeTable[opcode] = [this]() { RL_C(); };
+        }
+        else if (mnemonic == "RL D") {
+            opcodeTable[opcode] = [this]() { RL_D(); };
+        }
+        else if (mnemonic == "RL E") {
+            opcodeTable[opcode] = [this]() { RL_E(); };
+        }
+        else if (mnemonic == "RL H") {
+            opcodeTable[opcode] = [this]() { RL_H(); };
+        }
+        else if (mnemonic == "RL L") {
+            opcodeTable[opcode] = [this]() { RL_L(); };
+        }
+        else if (mnemonic == "RL (HL)") {
+            opcodeTable[opcode] = [this]() { RL_HLm(); };
+        }
+        else if (mnemonic == "RL A") {
+            opcodeTable[opcode] = [this]() { RL_A(); };
+        }
+        else if (mnemonic == "RR B") {
+            opcodeTable[opcode] = [this]() { RR_B(); };
+        }
+        else if (mnemonic == "RR C") {
+            opcodeTable[opcode] = [this]() { RR_C(); };
+        }
+        else if (mnemonic == "RR D") {
+            opcodeTable[opcode] = [this]() { RR_D(); };
+        }
+        else if (mnemonic == "RR E") {
+            opcodeTable[opcode] = [this]() { RR_E(); };
+        }
+        else if (mnemonic == "RR H") {
+            opcodeTable[opcode] = [this]() { RR_H(); };
+        }
+        else if (mnemonic == "RR L") {
+            opcodeTable[opcode] = [this]() { RR_L(); };
+        }
+        else if (mnemonic == "RR (HL)") {
+            opcodeTable[opcode] = [this]() { RR_HLm(); };
+        }
+        else if (mnemonic == "RR A") {
+            opcodeTable[opcode] = [this]() { RR_A(); };
+        }
+        else if (mnemonic == "SLA B") {
+            opcodeTable[opcode] = [this]() { SLA_B(); };
+        }
+        else if (mnemonic == "SLA C") {
+            opcodeTable[opcode] = [this]() { SLA_C(); };
+        }
+        else if (mnemonic == "SLA D") {
+            opcodeTable[opcode] = [this]() { SLA_D(); };
+        }
+        else if (mnemonic == "SLA E") {
+            opcodeTable[opcode] = [this]() { SLA_E(); };
+        }
+        else if (mnemonic == "SLA H") {
+            opcodeTable[opcode] = [this]() { SLA_H(); };
+        }
+        else if (mnemonic == "SLA L") {
+            opcodeTable[opcode] = [this]() { SLA_L(); };
+        }
+        else if (mnemonic == "SLA (HL)") {
+            opcodeTable[opcode] = [this]() { SLA_HLm(); };
+        }
+        else if (mnemonic == "SLA A") {
+            opcodeTable[opcode] = [this]() { SLA_A(); };
+        }
+        else if (mnemonic == "SRA B") {
+            opcodeTable[opcode] = [this]() { SRA_B(); };
+        }
+        else if (mnemonic == "SRA C") {
+            opcodeTable[opcode] = [this]() { SRA_C(); };
+        }
+        else if (mnemonic == "SRA D") {
+            opcodeTable[opcode] = [this]() { SRA_D(); };
+        }
+        else if (mnemonic == "SRA E") {
+            opcodeTable[opcode] = [this]() { SRA_E(); };
+        }
+        else if (mnemonic == "SRA H") {
+            opcodeTable[opcode] = [this]() { SRA_H(); };
+        }
+        else if (mnemonic == "SRA L") {
+            opcodeTable[opcode] = [this]() { SRA_L(); };
+        }
+        else if (mnemonic == "SRA (HL)") {
+            opcodeTable[opcode] = [this]() { SRA_HLm(); };
+        }
+        else if (mnemonic == "SRA A") {
+            opcodeTable[opcode] = [this]() { SRA_A(); };
+        }
+        else if (mnemonic == "SWAP B") {
+            opcodeTable[opcode] = [this]() { SWAP_B(); };
+        }
+        else if (mnemonic == "SWAP C") {
+            opcodeTable[opcode] = [this]() { SWAP_C(); };
+        }
+        else if (mnemonic == "SWAP D") {
+            opcodeTable[opcode] = [this]() { SWAP_D(); };
+        }
+        else if (mnemonic == "SWAP E") {
+            opcodeTable[opcode] = [this]() { SWAP_E(); };
+        }
+        else if (mnemonic == "SWAP H") {
+            opcodeTable[opcode] = [this]() { SWAP_H(); };
+        }
+        else if (mnemonic == "SWAP L") {
+            opcodeTable[opcode] = [this]() { SWAP_L(); };
+        }
+        else if (mnemonic == "SWAP (HL)") {
+            opcodeTable[opcode] = [this]() { SWAP_HLm(); };
+        }
+        else if (mnemonic == "SWAP A") {
+            opcodeTable[opcode] = [this]() { SWAP_A(); };
+        }
+        else if (mnemonic == "SRL B") {
+            opcodeTable[opcode] = [this]() { SRL_B(); };
+        }
+        else if (mnemonic == "SRL C") {
+            opcodeTable[opcode] = [this]() { SRL_C(); };
+        }
+        else if (mnemonic == "SRL D") {
+            opcodeTable[opcode] = [this]() { SRL_D(); };
+        }
+        else if (mnemonic == "SRL E") {
+            opcodeTable[opcode] = [this]() { SRL_E(); };
+        }
+        else if (mnemonic == "SRL H") {
+            opcodeTable[opcode] = [this]() { SRL_H(); };
+        }
+        else if (mnemonic == "SRL L") {
+            opcodeTable[opcode] = [this]() { SRL_L(); };
+        }
+        else if (mnemonic == "SRL (HL)") {
+            opcodeTable[opcode] = [this]() { SRL_HLm(); };
+        }
+        else if (mnemonic == "SRL A") {
+            opcodeTable[opcode] = [this]() { SRL_A(); };
+        }
+        // BIT instructions
+        else if (mnemonic == "BIT 0,B") {
+            opcodeTable[opcode] = [this]() { BIT_0_B(); };
+        }
+        else if (mnemonic == "BIT 0,C") {
+            opcodeTable[opcode] = [this]() { BIT_0_C(); };
+        }
+        else if (mnemonic == "BIT 0,D") {
+            opcodeTable[opcode] = [this]() { BIT_0_D(); };
+        }
+        else if (mnemonic == "BIT 0,E") {
+            opcodeTable[opcode] = [this]() { BIT_0_E(); };
+        }
+        else if (mnemonic == "BIT 0,H") {
+            opcodeTable[opcode] = [this]() { BIT_0_H(); };
+        }
+        else if (mnemonic == "BIT 0,L") {
+            opcodeTable[opcode] = [this]() { BIT_0_L(); };
+        }
+        else if (mnemonic == "BIT 0,(HL)") {
+            opcodeTable[opcode] = [this]() { BIT_0_HLm(); };
+        }
+        else if (mnemonic == "BIT 0,A") {
+            opcodeTable[opcode] = [this]() { BIT_0_A(); };
+        }
+        else if (mnemonic == "BIT 1,B") {
+            opcodeTable[opcode] = [this]() { BIT_1_B(); };
+        }
+        else if (mnemonic == "BIT 1,C") {
+            opcodeTable[opcode] = [this]() { BIT_1_C(); };
+        }
+        else if (mnemonic == "BIT 1,D") {
+            opcodeTable[opcode] = [this]() { BIT_1_D(); };
+        }
+        else if (mnemonic == "BIT 1,E") {
+            opcodeTable[opcode] = [this]() { BIT_1_E(); };
+        }
+        else if (mnemonic == "BIT 1,H") {
+            opcodeTable[opcode] = [this]() { BIT_1_H(); };
+        }
+        else if (mnemonic == "BIT 1,L") {
+            opcodeTable[opcode] = [this]() { BIT_1_L(); };
+        }
+        else if (mnemonic == "BIT 1,(HL)") {
+            opcodeTable[opcode] = [this]() { BIT_1_HLm(); };
+        }
+        else if (mnemonic == "BIT 1,A") {
+            opcodeTable[opcode] = [this]() { BIT_1_A(); };
+        }
+        else if (mnemonic == "BIT 2,B") {
+            opcodeTable[opcode] = [this]() { BIT_2_B(); };
+        }
+        else if (mnemonic == "BIT 2,C") {
+            opcodeTable[opcode] = [this]() { BIT_2_C(); };
+        }
+        else if (mnemonic == "BIT 2,D") {
+            opcodeTable[opcode] = [this]() { BIT_2_D(); };
+        }
+        else if (mnemonic == "BIT 2,E") {
+            opcodeTable[opcode] = [this]() { BIT_2_E(); };
+        }
+        else if (mnemonic == "BIT 2,H") {
+            opcodeTable[opcode] = [this]() { BIT_2_H(); };
+        }
+        else if (mnemonic == "BIT 2,L") {
+            opcodeTable[opcode] = [this]() { BIT_2_L(); };
+        }
+        else if (mnemonic == "BIT 2,(HL)") {
+            opcodeTable[opcode] = [this]() { BIT_2_HLm(); };
+        }
+        else if (mnemonic == "BIT 2,A") {
+            opcodeTable[opcode] = [this]() { BIT_2_A(); };
+        }
+        else if (mnemonic == "BIT 3,B") {
+            opcodeTable[opcode] = [this]() { BIT_3_B(); };
+        }
+        else if (mnemonic == "BIT 3,C") {
+            opcodeTable[opcode] = [this]() { BIT_3_C(); };
+        }
+        else if (mnemonic == "BIT 3,D") {
+            opcodeTable[opcode] = [this]() { BIT_3_D(); };
+        }
+        else if (mnemonic == "BIT 3,E") {
+            opcodeTable[opcode] = [this]() { BIT_3_E(); };
+        }
+        else if (mnemonic == "BIT 3,H") {
+            opcodeTable[opcode] = [this]() { BIT_3_H(); };
+        }
+        else if (mnemonic == "BIT 3,L") {
+            opcodeTable[opcode] = [this]() { BIT_3_L(); };
+        }
+        else if (mnemonic == "BIT 3,(HL)") {
+            opcodeTable[opcode] = [this]() { BIT_3_HLm(); };
+        }
+        else if (mnemonic == "BIT 3,A") {
+            opcodeTable[opcode] = [this]() { BIT_3_A(); };
+        }
+        else if (mnemonic == "BIT 4,B") {
+            opcodeTable[opcode] = [this]() { BIT_4_B(); };
+        }
+        else if (mnemonic == "BIT 4,C") {
+            opcodeTable[opcode] = [this]() { BIT_4_C(); };
+        }
+        else if (mnemonic == "BIT 4,D") {
+            opcodeTable[opcode] = [this]() { BIT_4_D(); };
+        }
+        else if (mnemonic == "BIT 4,E") {
+            opcodeTable[opcode] = [this]() { BIT_4_E(); };
+        }
+        else if (mnemonic == "BIT 4,H") {
+            opcodeTable[opcode] = [this]() { BIT_4_H(); };
+        }
+        else if (mnemonic == "BIT 4,L") {
+            opcodeTable[opcode] = [this]() { BIT_4_L(); };
+        }
+        else if (mnemonic == "BIT 4,(HL)") {
+            opcodeTable[opcode] = [this]() { BIT_4_HLm(); };
+        }
+        else if (mnemonic == "BIT 4,A") {
+            opcodeTable[opcode] = [this]() { BIT_4_A(); };
+        }
+        else if (mnemonic == "BIT 5,B") {
+            opcodeTable[opcode] = [this]() { BIT_5_B(); };
+        }
+        else if (mnemonic == "BIT 5,C") {
+            opcodeTable[opcode] = [this]() { BIT_5_C(); };
+        }
+        else if (mnemonic == "BIT 5,D") {
+            opcodeTable[opcode] = [this]() { BIT_5_D(); };
+        }
+        else if (mnemonic == "BIT 5,E") {
+            opcodeTable[opcode] = [this]() { BIT_5_E(); };
+        }
+        else if (mnemonic == "BIT 5,H") {
+            opcodeTable[opcode] = [this]() { BIT_5_H(); };
+        }
+        else if (mnemonic == "BIT 5,L") {
+            opcodeTable[opcode] = [this]() { BIT_5_L(); };
+        }
+        else if (mnemonic == "BIT 5,(HL)") {
+            opcodeTable[opcode] = [this]() { BIT_5_HLm(); };
+        }
+        else if (mnemonic == "BIT 5,A") {
+            opcodeTable[opcode] = [this]() { BIT_5_A(); };
+        }
+        else if (mnemonic == "BIT 6,B") {
+            opcodeTable[opcode] = [this]() { BIT_6_B(); };
+        }
+        else if (mnemonic == "BIT 6,C") {
+            opcodeTable[opcode] = [this]() { BIT_6_C(); };
+        }
+        else if (mnemonic == "BIT 6,D") {
+            opcodeTable[opcode] = [this]() { BIT_6_D(); };
+        }
+        else if (mnemonic == "BIT 6,E") {
+            opcodeTable[opcode] = [this]() { BIT_6_E(); };
+        }
+        else if (mnemonic == "BIT 6,H") {
+            opcodeTable[opcode] = [this]() { BIT_6_H(); };
+        }
+        else if (mnemonic == "BIT 6,L") {
+            opcodeTable[opcode] = [this]() { BIT_6_L(); };
+        }
+        else if (mnemonic == "BIT 6,(HL)") {
+            opcodeTable[opcode] = [this]() { BIT_6_HLm(); };
+        }
+        else if (mnemonic == "BIT 6,A") {
+            opcodeTable[opcode] = [this]() { BIT_6_A(); };
+        }
+        else if (mnemonic == "BIT 7,B") {
+            opcodeTable[opcode] = [this]() { BIT_7_B(); };
+        }
+        else if (mnemonic == "BIT 7,C") {
+            opcodeTable[opcode] = [this]() { BIT_7_C(); };
+        }
+        else if (mnemonic == "BIT 7,D") {
+            opcodeTable[opcode] = [this]() { BIT_7_D(); };
+        }
+        else if (mnemonic == "BIT 7,E") {
+            opcodeTable[opcode] = [this]() { BIT_7_E(); };
+        }
+        else if (mnemonic == "BIT 7,H") {
+            opcodeTable[opcode] = [this]() { BIT_7_H(); };
+        }
+        else if (mnemonic == "BIT 7,L") {
+            opcodeTable[opcode] = [this]() { BIT_7_L(); };
+        }
+        else if (mnemonic == "BIT 7,(HL)") {
+            opcodeTable[opcode] = [this]() { BIT_7_HLm(); };
+        }
+        else if (mnemonic == "BIT 7,A") {
+            opcodeTable[opcode] = [this]() { BIT_7_A(); };
+        }
+        else if (mnemonic == "RES 0,B") {
+            opcodeTable[opcode] = [this]() { RES_0_B(); };
+        }
+        else if (mnemonic == "RES 0,C") {
+            opcodeTable[opcode] = [this]() { RES_0_C(); };
+        }
+        else if (mnemonic == "RES 0,D") {
+            opcodeTable[opcode] = [this]() { RES_0_D(); };
+        }
+        else if (mnemonic == "RES 0,E") {
+            opcodeTable[opcode] = [this]() { RES_0_E(); };
+        }
+        else if (mnemonic == "RES 0,H") {
+            opcodeTable[opcode] = [this]() { RES_0_H(); };
+        }
+        else if (mnemonic == "RES 0,L") {
+            opcodeTable[opcode] = [this]() { RES_0_L(); };
+        }
+        else if (mnemonic == "RES 0,(HL)") {
+            opcodeTable[opcode] = [this]() { RES_0_HLm(); };
+        }
+        else if (mnemonic == "RES 0,A") {
+            opcodeTable[opcode] = [this]() { RES_0_A(); };
+        }
+        else if (mnemonic == "RES 1,B") {
+            opcodeTable[opcode] = [this]() { RES_1_B(); };
+        }
+        else if (mnemonic == "RES 1,C") {
+            opcodeTable[opcode] = [this]() { RES_1_C(); };
+        }
+        else if (mnemonic == "RES 1,D") {
+            opcodeTable[opcode] = [this]() { RES_1_D(); };
+        }
+        else if (mnemonic == "RES 1,E") {
+            opcodeTable[opcode] = [this]() { RES_1_E(); };
+        }
+        else if (mnemonic == "RES 1,H") {
+            opcodeTable[opcode] = [this]() { RES_1_H(); };
+        }
+        else if (mnemonic == "RES 1,L") {
+            opcodeTable[opcode] = [this]() { RES_1_L(); };
+        }
+        else if (mnemonic == "RES 1,(HL)") {
+            opcodeTable[opcode] = [this]() { RES_1_HLm(); };
+        }
+        else if (mnemonic == "RES 1,A") {
+            opcodeTable[opcode] = [this]() { RES_1_A(); };
+        }
+        else if (mnemonic == "RES 2,B") {
+            opcodeTable[opcode] = [this]() { RES_2_B(); };
+        }
+        else if (mnemonic == "RES 2,C") {
+            opcodeTable[opcode] = [this]() { RES_2_C(); };
+        }
+        else if (mnemonic == "RES 2,D") {
+            opcodeTable[opcode] = [this]() { RES_2_D(); };
+        }
+        else if (mnemonic == "RES 2,E") {
+            opcodeTable[opcode] = [this]() { RES_2_E(); };
+        }
+        else if (mnemonic == "RES 2,H") {
+            opcodeTable[opcode] = [this]() { RES_2_H(); };
+        }
+        else if (mnemonic == "RES 2,L") {
+            opcodeTable[opcode] = [this]() { RES_2_L(); };
+        }
+        else if (mnemonic == "RES 2,(HL)") {
+            opcodeTable[opcode] = [this]() { RES_2_HLm(); };
+        }
+        else if (mnemonic == "RES 2,A") {
+            opcodeTable[opcode] = [this]() { RES_2_A(); };
+        }
+        else if (mnemonic == "RES 3,B") {
+            opcodeTable[opcode] = [this]() { RES_3_B(); };
+        }
+        else if (mnemonic == "RES 3,C") {
+            opcodeTable[opcode] = [this]() { RES_3_C(); };
+        }
+        else if (mnemonic == "RES 3,D") {
+            opcodeTable[opcode] = [this]() { RES_3_D(); };
+        }
+        else if (mnemonic == "RES 3,E") {
+            opcodeTable[opcode] = [this]() { RES_3_E(); };
+        }
+        else if (mnemonic == "RES 3,H") {
+            opcodeTable[opcode] = [this]() { RES_3_H(); };
+        }
+        else if (mnemonic == "RES 3,L") {
+            opcodeTable[opcode] = [this]() { RES_3_L(); };
+        }
+        else if (mnemonic == "RES 3,(HL)") {
+            opcodeTable[opcode] = [this]() { RES_3_HLm(); };
+        }
+        else if (mnemonic == "RES 3,A") {
+            opcodeTable[opcode] = [this]() { RES_3_A(); };
+        }
+        else if (mnemonic == "RES 4,B") {
+            opcodeTable[opcode] = [this]() { RES_4_B(); };
+        }
+        else if (mnemonic == "RES 4,C") {
+            opcodeTable[opcode] = [this]() { RES_4_C(); };
+        }
+        else if (mnemonic == "RES 4,D") {
+            opcodeTable[opcode] = [this]() { RES_4_D(); };
+        }
+        else if (mnemonic == "RES 4,E") {
+            opcodeTable[opcode] = [this]() { RES_4_E(); };
+        }
+        else if (mnemonic == "RES 4,H") {
+            opcodeTable[opcode] = [this]() { RES_4_H(); };
+        }
+        else if (mnemonic == "RES 4,L") {
+            opcodeTable[opcode] = [this]() { RES_4_L(); };
+        }
+        else if (mnemonic == "RES 4,(HL)") {
+            opcodeTable[opcode] = [this]() { RES_4_HLm(); };
+        }
+        else if (mnemonic == "RES 4,A") {
+            opcodeTable[opcode] = [this]() { RES_4_A(); };
+        }
+        else if (mnemonic == "RES 5,B") {
+            opcodeTable[opcode] = [this]() { RES_5_B(); };
+        }
+        else if (mnemonic == "RES 5,C") {
+            opcodeTable[opcode] = [this]() { RES_5_C(); };
+        }
+        else if (mnemonic == "RES 5,D") {
+            opcodeTable[opcode] = [this]() { RES_5_D(); };
+        }
+        else if (mnemonic == "RES 5,E") {
+            opcodeTable[opcode] = [this]() { RES_5_E(); };
+        }
+        else if (mnemonic == "RES 5,H") {
+            opcodeTable[opcode] = [this]() { RES_5_H(); };
+        }
+        else if (mnemonic == "RES 5,L") {
+            opcodeTable[opcode] = [this]() { RES_5_L(); };
+        }
+        else if (mnemonic == "RES 5,(HL)") {
+            opcodeTable[opcode] = [this]() { RES_5_HLm(); };
+        }
+        else if (mnemonic == "RES 5,A") {
+            opcodeTable[opcode] = [this]() { RES_5_A(); };
+        }
+        else if (mnemonic == "RES 6,B") {
+            opcodeTable[opcode] = [this]() { RES_6_B(); };
+        }
+        else if (mnemonic == "RES 6,C") {
+            opcodeTable[opcode] = [this]() { RES_6_C(); };
+        }
+        else if (mnemonic == "RES 6,D") {
+            opcodeTable[opcode] = [this]() { RES_6_D(); };
+        }
+        else if (mnemonic == "RES 6,E") {
+            opcodeTable[opcode] = [this]() { RES_6_E(); };
+        }
+        else if (mnemonic == "RES 6,H") {
+            opcodeTable[opcode] = [this]() { RES_6_H(); };
+        }
+        else if (mnemonic == "RES 6,L") {
+            opcodeTable[opcode] = [this]() { RES_6_L(); };
+        }
+        else if (mnemonic == "RES 6,(HL)") {
+            opcodeTable[opcode] = [this]() { RES_6_HLm(); };
+        }
+        else if (mnemonic == "RES 6,A") {
+            opcodeTable[opcode] = [this]() { RES_6_A(); };
+        }
+        else if (mnemonic == "RES 7,B") {
+            opcodeTable[opcode] = [this]() { RES_7_B(); };
+        }
+        else if (mnemonic == "RES 7,C") {
+            opcodeTable[opcode] = [this]() { RES_7_C(); };
+        }
+        else if (mnemonic == "RES 7,D") {
+            opcodeTable[opcode] = [this]() { RES_7_D(); };
+        }
+        else if (mnemonic == "RES 7,E") {
+            opcodeTable[opcode] = [this]() { RES_7_E(); };
+        }
+        else if (mnemonic == "RES 7,H") {
+            opcodeTable[opcode] = [this]() { RES_7_H(); };
+        }
+        else if (mnemonic == "RES 7,L") {
+            opcodeTable[opcode] = [this]() { RES_7_L(); };
+        }
+        else if (mnemonic == "RES 7,(HL)") {
+            opcodeTable[opcode] = [this]() { RES_7_HLm(); };
+        }
+        else if (mnemonic == "RES 7,A") {
+            opcodeTable[opcode] = [this]() { RES_7_A(); };
+        }
+        else if (mnemonic == "SET 0,B") {
+            opcodeTable[opcode] = [this]() { SET_0_B(); };
+        }
+        else if (mnemonic == "SET 0,C") {
+            opcodeTable[opcode] = [this]() { SET_0_C(); };
+        }
+        else if (mnemonic == "SET 0,D") {
+            opcodeTable[opcode] = [this]() { SET_0_D(); };
+        }
+        else if (mnemonic == "SET 0,E") {
+            opcodeTable[opcode] = [this]() { SET_0_E(); };
+        }
+        else if (mnemonic == "SET 0,H") {
+            opcodeTable[opcode] = [this]() { SET_0_H(); };
+        }
+        else if (mnemonic == "SET 0,L") {
+            opcodeTable[opcode] = [this]() { SET_0_L(); };
+        }
+        else if (mnemonic == "SET 0,(HL)") {
+            opcodeTable[opcode] = [this]() { SET_0_HLm(); };
+        }
+        else if (mnemonic == "SET 0,A") {
+            opcodeTable[opcode] = [this]() { SET_0_A(); };
+        }
+        else if (mnemonic == "SET 1,B") {
+            opcodeTable[opcode] = [this]() { SET_1_B(); };
+        }
+        else if (mnemonic == "SET 1,C") {
+            opcodeTable[opcode] = [this]() { SET_1_C(); };
+        }
+        else if (mnemonic == "SET 1,D") {
+            opcodeTable[opcode] = [this]() { SET_1_D(); };
+        }
+        else if (mnemonic == "SET 1,E") {
+            opcodeTable[opcode] = [this]() { SET_1_E(); };
+        }
+        else if (mnemonic == "SET 1,H") {
+            opcodeTable[opcode] = [this]() { SET_1_H(); };
+        }
+        else if (mnemonic == "SET 1,L") {
+            opcodeTable[opcode] = [this]() { SET_1_L(); };
+        }
+        else if (mnemonic == "SET 1,(HL)") {
+            opcodeTable[opcode] = [this]() { SET_1_HLm(); };
+        }
+        else if (mnemonic == "SET 1,A") {
+            opcodeTable[opcode] = [this]() { SET_1_A(); };
+        }
+        else if (mnemonic == "SET 2,B") {
+            opcodeTable[opcode] = [this]() { SET_2_B(); };
+        }
+        else if (mnemonic == "SET 2,C") {
+            opcodeTable[opcode] = [this]() { SET_2_C(); };
+        }
+        else if (mnemonic == "SET 2,D") {
+            opcodeTable[opcode] = [this]() { SET_2_D(); };
+        }
+        else if (mnemonic == "SET 2,E") {
+            opcodeTable[opcode] = [this]() { SET_2_E(); };
+        }
+        else if (mnemonic == "SET 2,H") {
+            opcodeTable[opcode] = [this]() { SET_2_H(); };
+        }
+        else if (mnemonic == "SET 2,L") {
+            opcodeTable[opcode] = [this]() { SET_2_L(); };
+        }
+        else if (mnemonic == "SET 2,(HL)") {
+            opcodeTable[opcode] = [this]() { SET_2_HLm(); };
+        }
+        else if (mnemonic == "SET 2,A") {
+            opcodeTable[opcode] = [this]() { SET_2_A(); };
+        }
+        else if (mnemonic == "SET 3,B") {
+            opcodeTable[opcode] = [this]() { SET_3_B(); };
+        }
+        else if (mnemonic == "SET 3,C") {
+            opcodeTable[opcode] = [this]() { SET_3_C(); };
+        }
+        else if (mnemonic == "SET 3,D") {
+            opcodeTable[opcode] = [this]() { SET_3_D(); };
+        }
+        else if (mnemonic == "SET 3,E") {
+            opcodeTable[opcode] = [this]() { SET_3_E(); };
+        }
+        else if (mnemonic == "SET 3,H") {
+            opcodeTable[opcode] = [this]() { SET_3_H(); };
+        }
+        else if (mnemonic == "SET 3,L") {
+            opcodeTable[opcode] = [this]() { SET_3_L(); };
+        }
+        else if (mnemonic == "SET 3,(HL)") {
+            opcodeTable[opcode] = [this]() { SET_3_HLm(); };
+        }
+        else if (mnemonic == "SET 3,A") {
+            opcodeTable[opcode] = [this]() { SET_3_A(); };
+        }
+        else if (mnemonic == "SET 4,B") {
+            opcodeTable[opcode] = [this]() { SET_4_B(); };
+        }
+        else if (mnemonic == "SET 4,C") {
+            opcodeTable[opcode] = [this]() { SET_4_C(); };
+        }
+        else if (mnemonic == "SET 4,D") {
+            opcodeTable[opcode] = [this]() { SET_4_D(); };
+        }
+        else if (mnemonic == "SET 4,E") {
+            opcodeTable[opcode] = [this]() { SET_4_E(); };
+        }
+        else if (mnemonic == "SET 4,H") {
+            opcodeTable[opcode] = [this]() { SET_4_H(); };
+        }
+        else if (mnemonic == "SET 4,L") {
+            opcodeTable[opcode] = [this]() { SET_4_L(); };
+        }
+        else if (mnemonic == "SET 4,(HL)") {
+            opcodeTable[opcode] = [this]() { SET_4_HLm(); };
+        }
+        else if (mnemonic == "SET 4,A") {
+            opcodeTable[opcode] = [this]() { SET_4_A(); };
+        }
+        else if (mnemonic == "SET 5,B") {
+            opcodeTable[opcode] = [this]() { SET_5_B(); };
+        }
+        else if (mnemonic == "SET 5,C") {
+            opcodeTable[opcode] = [this]() { SET_5_C(); };
+        }
+        else if (mnemonic == "SET 5,D") {
+            opcodeTable[opcode] = [this]() { SET_5_D(); };
+        }
+        else if (mnemonic == "SET 5,E") {
+            opcodeTable[opcode] = [this]() { SET_5_E(); };
+        }
+        else if (mnemonic == "SET 5,H") {
+            opcodeTable[opcode] = [this]() { SET_5_H(); };
+        }
+        else if (mnemonic == "SET 5,L") {
+            opcodeTable[opcode] = [this]() { SET_5_L(); };
+        }
+        else if (mnemonic == "SET 5,(HL)") {
+            opcodeTable[opcode] = [this]() { SET_5_HLm(); };
+        }
+        else if (mnemonic == "SET 5,A") {
+            opcodeTable[opcode] = [this]() { SET_5_A(); };
+        }
+        else if (mnemonic == "SET 6,B") {
+            opcodeTable[opcode] = [this]() { SET_6_B(); };
+        }
+        else if (mnemonic == "SET 6,C") {
+            opcodeTable[opcode] = [this]() { SET_6_C(); };
+        }
+        else if (mnemonic == "SET 6,D") {
+            opcodeTable[opcode] = [this]() { SET_6_D(); };
+        }
+        else if (mnemonic == "SET 6,E") {
+            opcodeTable[opcode] = [this]() { SET_6_E(); };
+        }
+        else if (mnemonic == "SET 6,H") {
+            opcodeTable[opcode] = [this]() { SET_6_H(); };
+        }
+        else if (mnemonic == "SET 6,L") {
+            opcodeTable[opcode] = [this]() { SET_6_L(); };
+        }
+        else if (mnemonic == "SET 6,(HL)") {
+            opcodeTable[opcode] = [this]() { SET_6_HLm(); };
+        }
+        else if (mnemonic == "SET 6,A") {
+            opcodeTable[opcode] = [this]() { SET_6_A(); };
+        }
+        else if (mnemonic == "SET 7,B") {
+            opcodeTable[opcode] = [this]() { SET_7_B(); };
+        }
+        else if (mnemonic == "SET 7,C") {
+            opcodeTable[opcode] = [this]() { SET_7_C(); };
+        }
+        else if (mnemonic == "SET 7,D") {
+            opcodeTable[opcode] = [this]() { SET_7_D(); };
+        }
+        else if (mnemonic == "SET 7,E") {
+            opcodeTable[opcode] = [this]() { SET_7_E(); };
+        }
+        else if (mnemonic == "SET 7,H") {
+            opcodeTable[opcode] = [this]() { SET_7_H(); };
+        }
+        else if (mnemonic == "SET 7,L") {
+            opcodeTable[opcode] = [this]() { SET_7_L(); };
+        }
+        else if (mnemonic == "SET 7,(HL)") {
+            opcodeTable[opcode] = [this]() { SET_7_HLm(); };
+        }
+        else if (mnemonic == "SET 7,A") {
+            opcodeTable[opcode] = [this]() { SET_7_A(); };
+        }
+        else {
         std::cerr << "Unknown CB-prefixed mnemonic: " << mnemonic << std::endl;
+        }
     }
 }
 
