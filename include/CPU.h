@@ -342,7 +342,7 @@ private:
     void RST_18H();     // 0xDF
     void LDH_a8_A();    // 0xE0
     void POP_HL();      // 0xE1
-    void LD_C_A();      // 0xE2
+    void LDH_C_A();      // 0xE2
     void PUSH_HL();     // 0xE5
     void AND_n8();      // 0xE6
     void RST_20H();     // 0xE7
