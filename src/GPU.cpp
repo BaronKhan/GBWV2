@@ -199,9 +199,9 @@ void GPU::renderWindow(u32 scanline) {
         }
         
         // Calculate X position in the window map
-        u8 windowX = x - windowX;
-        u8 tileCol = windowX / 8;
-        u8 tileX = windowX % 8;
+        u8 relativeX = x - windowX;
+        u8 tileCol = relativeX / 8;
+        u8 tileX = relativeX % 8;
         
         // Get tile index from the tile map
         u16 tileMapOffset = (tileRow * 32) + tileCol;

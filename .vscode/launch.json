@@ -10,8 +10,11 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "console": "externalTerminal",
-            "preLaunchTask": "Build"
+            "console": "internalConsole",
+            "preLaunchTask": "Build",
+            "logging": {
+                "engineLogging": true
+            }            
         }
     ]
 } 

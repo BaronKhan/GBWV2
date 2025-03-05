@@ -4,6 +4,7 @@
 
 // Forward declarations
 class Cartridge;
+class GPU;
 
 // Memory Management Unit (MMU) class
 class Memory {

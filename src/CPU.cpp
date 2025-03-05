@@ -750,14 +750,14 @@ void CPU::initializeOpcodes() {
 // Execute opcode
 void CPU::executeOpcode(u8 opcode) {
     // Call opcode function
-    std::cout << "Executing opcode " << std::hex << (int)opcode << std::endl;
+    std::cout << "Executing opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 << std::endl;
     m_opcodeTable[opcode]();
 }
 
 // Execute CB opcode
 void CPU::executeCBOpcode(u8 opcode) {
     // Call CB opcode function
-    std::cout << "Executing CB opcode " << std::hex << (int)opcode << std::endl;
+    std::cout << "Executing CB opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 << std::endl;
     m_cbOpcodeTable[opcode]();
 }
 
