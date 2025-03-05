@@ -141,7 +141,17 @@ void CPU::parseOpcodeJson(const nlohmann::json& json) {
         std::vector<std::string> operands;
         if (it.value().contains("operands")) {
             for (const auto& operand : it.value()["operands"]) {
-                operands.push_back(operand["name"].get<std::string>());
+                auto name = operand["name"].get<std::string>();
+                if (operand.contains("increment") && operand["increment"].get<bool>()) {
+                    name += "+";
+                }
+                else if (operand.contains("decrement") && operand["decrement"].get<bool>()) {
+                    name += "-";
+                }
+                if (name == "HL" && operand.contains("immediate") && !operand["immediate"].get<bool>()) {
+                    name += "m";
+                }
+                operands.push_back(name);
             }
         }
         
@@ -203,23 +213,23 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         // unprefixed
         {"NOP", [this]() { NOP(); }},
         {"LD BC,n16", [this]() { LD_BC_n16(); }},
-        {"LD (BC),A", [this]() { LD_BC_A(); }},
+        {"LD BC,A", [this]() { LD_BC_A(); }},
         {"INC BC", [this]() { INC_BC(); }},
         {"INC B", [this]() { INC_B(); }},
         {"DEC B", [this]() { DEC_B(); }},
         {"LD B,n8", [this]() { LD_B_n8(); }},
         {"RLCA", [this]() { RLCA(); }},
-        {"LD (a16),SP", [this]() { LD_a16_SP(); }},
+        {"LD a16,SP", [this]() { LD_a16_SP(); }},
         {"ADD HL,BC", [this]() { ADD_HL_BC(); }},
-        {"LD A,(BC)", [this]() { LD_A_BC(); }},
+        {"LD A,BC", [this]() { LD_A_BC(); }},
         {"DEC BC", [this]() { DEC_BC(); }},
         {"INC C", [this]() { INC_C(); }},
         {"DEC C", [this]() { DEC_C(); }},
         {"LD C,n8", [this]() { LD_C_n8(); }},
         {"RRCA", [this]() { RRCA(); }},
-        {"STOP", [this]() { STOP(); }},
+        {"STOP n8", [this]() { STOP_n8(); }},
         {"LD DE,n16", [this]() { LD_DE_n16(); }},
-        {"LD (DE),A", [this]() { LD_DE_A(); }},
+        {"LD DE,A", [this]() { LD_DE_A(); }},
         {"INC DE", [this]() { INC_DE(); }},
         {"INC D", [this]() { INC_D(); }},
         {"DEC D", [this]() { DEC_D(); }},
@@ -227,7 +237,7 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"RLA", [this]() { RLA(); }},
         {"JR e8", [this]() { JR_e8(); }},
         {"ADD HL,DE", [this]() { ADD_HL_DE(); }},
-        {"LD A,(DE)", [this]() { LD_A_DE(); }},
+        {"LD A,DE", [this]() { LD_A_DE(); }},
         {"DEC DE", [this]() { DEC_DE(); }},
         {"INC E", [this]() { INC_E(); }},
         {"DEC E", [this]() { DEC_E(); }},
@@ -235,7 +245,7 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"RRA", [this]() { RRA(); }},
         {"JR NZ,e8", [this]() { JR_NZ_e8(); }},
         {"LD HL,n16", [this]() { LD_HL_n16(); }},
-        {"LD (HL+),A", [this]() {LD_HLI_A(); }},
+        {"LD HL+,A", [this]() {LD_HLI_A(); }},
         {"INC HL", [this]() { INC_HL(); }},
         {"INC H", [this]() { INC_H(); }},
         {"DEC H", [this]() { DEC_H(); }},
@@ -243,7 +253,7 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"DAA", [this]() { DAA(); }},
         {"JR Z,e8", [this]() { JR_Z_e8(); }},
         {"ADD HL,HL", [this]() { ADD_HL_HL(); }},
-        {"LD A,(HL+)", [this]() { LD_A_HLI(); }},
+        {"LD A,HL+", [this]() { LD_A_HLI(); }},
         {"DEC HL", [this]() { DEC_HL(); }},
         {"INC L", [this]() { INC_L(); }},
         {"DEC L", [this]() { DEC_L(); }},
@@ -251,15 +261,15 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"CPL", [this]() { CPL(); }},
         {"JR NC,e8", [this]() { JR_NC_e8(); }},
         {"LD SP,n16", [this]() { LD_SP_n16(); }},
-        {"LD (HL-),A", [this]() { LD_HLD_A(); }},
+        {"LD HL-,A", [this]() { LD_HLD_A(); }},
         {"INC SP", [this]() { INC_SP(); }},
         {"INC HLm", [this]() { INC_HLm(); }},
         {"DEC HLm", [this]() { DEC_HLm(); }},
-        {"LD HL,n8", [this]() { LD_HL_n8(); }},
+        {"LD HLm,n8", [this]() { LD_HLm_n8(); }},
         {"SCF", [this]() { SCF(); }},
         {"JR C,e8", [this]() { JR_C_e8(); }},
         {"ADD HL,SP", [this]() { ADD_HL_SP(); }},
-        {"LD A,(HL-)", [this]() { LD_A_HLD(); }},
+        {"LD A,HL-", [this]() { LD_A_HLD(); }},
         {"DEC SP", [this]() { DEC_SP(); }},
         {"INC A", [this]() { INC_A(); }},
         {"DEC A", [this]() { DEC_A(); }},
@@ -271,7 +281,7 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"LD B,E", [this]() { LD_B_E(); }},
         {"LD B,H", [this]() { LD_B_H(); }},
         {"LD B,L", [this]() { LD_B_L(); }},
-        {"LD B,(HL)", [this]() { LD_B_HLm(); }},
+        {"LD B,HLm", [this]() { LD_B_HLm(); }},
         {"LD B,A", [this]() { LD_B_A(); }},
         {"LD C,B", [this]() { LD_C_B(); }},
         {"LD C,C", [this]() { LD_C_C(); }},
@@ -279,7 +289,7 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"LD C,E", [this]() { LD_C_E(); }},
         {"LD C,H", [this]() { LD_C_H(); }},
         {"LD C,L", [this]() { LD_C_L(); }},
-        {"LD C,(HL)", [this]() { LD_C_HLm(); }},
+        {"LD C,HLm", [this]() { LD_C_HLm(); }},
         {"LD C,A", [this]() { LD_C_A(); }},
         {"LD D,B", [this]() { LD_D_B(); }},
         {"LD D,C", [this]() { LD_D_C(); }},
@@ -287,7 +297,7 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"LD D,E", [this]() { LD_D_E(); }},
         {"LD D,H", [this]() { LD_D_H(); }},
         {"LD D,L", [this]() { LD_D_L(); }},
-        {"LD D,(HL)", [this]() { LD_D_HLm(); }},
+        {"LD D,HLm", [this]() { LD_D_HLm(); }},
         {"LD D,A", [this]() { LD_D_A(); }},
         {"LD E,B", [this]() { LD_E_B(); }},
         {"LD E,C", [this]() { LD_E_C(); }},
@@ -295,7 +305,7 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"LD E,E", [this]() { LD_E_E(); }},
         {"LD E,H", [this]() { LD_E_H(); }},
         {"LD E,L", [this]() { LD_E_L(); }},
-        {"LD E,(HL)", [this]() { LD_E_HLm(); }},
+        {"LD E,HLm", [this]() { LD_E_HLm(); }},
         {"LD E,A", [this]() { LD_E_A(); }},
         {"LD H,B", [this]() { LD_H_B(); }},
         {"LD H,C", [this]() { LD_H_C(); }},
@@ -303,7 +313,7 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"LD H,E", [this]() { LD_H_E(); }},
         {"LD H,H", [this]() { LD_H_H(); }},
         {"LD H,L", [this]() { LD_H_L(); }},
-        {"LD H,(HL)", [this]() { LD_H_HLm(); }},
+        {"LD H,HLm", [this]() { LD_H_HLm(); }},
         {"LD H,A", [this]() { LD_H_A(); }},
         {"LD L,B", [this]() { LD_L_B(); }},
         {"LD L,C", [this]() { LD_L_C(); }},
@@ -311,23 +321,23 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"LD L,E", [this]() { LD_L_E(); }},
         {"LD L,H", [this]() { LD_L_H(); }},
         {"LD L,L", [this]() { LD_L_L(); }},
-        {"LD L,(HL)", [this]() { LD_L_HLm(); }},
+        {"LD L,HLm", [this]() { LD_L_HLm(); }},
         {"LD L,A", [this]() { LD_L_A(); }},
-        {"LD (HL),B", [this]() { LD_HLm_B(); }},
-        {"LD (HL),C", [this]() { LD_HLm_C(); }},
-        {"LD (HL),D", [this]() { LD_HLm_D(); }},
-        {"LD (HL),E", [this]() { LD_HLm_E(); }},
-        {"LD (HL),H", [this]() { LD_HLm_H(); }},
-        {"LD (HL),L", [this]() { LD_HLm_L(); }},
+        {"LD HLm,B", [this]() { LD_HLm_B(); }},
+        {"LD HLm,C", [this]() { LD_HLm_C(); }},
+        {"LD HLm,D", [this]() { LD_HLm_D(); }},
+        {"LD HLm,E", [this]() { LD_HLm_E(); }},
+        {"LD HLm,H", [this]() { LD_HLm_H(); }},
+        {"LD HLm,L", [this]() { LD_HLm_L(); }},
         {"HALT", [this]() { HALT(); }},
-        {"LD (HL),A", [this]() { LD_HLm_A(); }},
+        {"LD HLm,A", [this]() { LD_HLm_A(); }},
         {"LD A,B", [this]() { LD_A_B(); }},
         {"LD A,C", [this]() { LD_A_C(); }},
         {"LD A,D", [this]() { LD_A_D(); }},
         {"LD A,E", [this]() { LD_A_E(); }},
         {"LD A,H", [this]() { LD_A_H(); }},
         {"LD A,L", [this]() { LD_A_L(); }},
-        {"LD A,(HL)", [this]() { LD_A_HLm(); }},
+        {"LD A,HLm", [this]() { LD_A_HLm(); }},
         {"LD A,A", [this]() { LD_A_A(); }},
         {"ADD A,B", [this]() { ADD_A_B(); }},
         {"ADD A,C", [this]() { ADD_A_C(); }},
@@ -335,7 +345,7 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"ADD A,E", [this]() { ADD_A_E(); }},
         {"ADD A,H", [this]() { ADD_A_H(); }},
         {"ADD A,L", [this]() { ADD_A_L(); }},
-        {"ADD A,(HL)", [this]() { ADD_A_HLm(); }},
+        {"ADD A,HLm", [this]() { ADD_A_HLm(); }},
         {"ADD A,A", [this]() { ADD_A_A(); }},
         {"ADC A,B", [this]() { ADC_A_B(); }},
         {"ADC A,C", [this]() { ADC_A_C(); }},
@@ -343,56 +353,56 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"ADC A,E", [this]() { ADC_A_E(); }},
         {"ADC A,H", [this]() { ADC_A_H(); }},
         {"ADC A,L", [this]() { ADC_A_L(); }},
-        {"ADC A,(HL)", [this]() { ADC_A_HLm(); }},
+        {"ADC A,HLm", [this]() { ADC_A_HLm(); }},
         {"ADC A,A", [this]() { ADC_A_A(); }},
-        {"SUB B", [this]() { SUB_B(); }},
-        {"SUB C", [this]() { SUB_C(); }},
-        {"SUB D", [this]() { SUB_D(); }},
-        {"SUB E", [this]() { SUB_E(); }},
-        {"SUB H", [this]() { SUB_H(); }},
-        {"SUB L", [this]() { SUB_L(); }},
-        {"SUB (HL)", [this]() { SUB_HLm(); }},
-        {"SUB A", [this]() { SUB_A(); }},
+        {"SUB A,B", [this]() { SUB_A_B(); }},
+        {"SUB A,C", [this]() { SUB_A_C(); }},
+        {"SUB A,D", [this]() { SUB_A_D(); }},
+        {"SUB A,E", [this]() { SUB_A_E(); }},
+        {"SUB A,H", [this]() { SUB_A_H(); }},
+        {"SUB A,L", [this]() { SUB_A_L(); }},
+        {"SUB A,HLm", [this]() { SUB_A_HLm(); }},
+        {"SUB A,A", [this]() { SUB_A_A(); }},
         {"SBC A,B", [this]() { SBC_A_B(); }},
         {"SBC A,C", [this]() { SBC_A_C(); }},
         {"SBC A,D", [this]() { SBC_A_D(); }},
         {"SBC A,E", [this]() { SBC_A_E(); }},
         {"SBC A,H", [this]() { SBC_A_H(); }},
         {"SBC A,L", [this]() { SBC_A_L(); }},
-        {"SBC A,(HL)", [this]() { SBC_A_HLm(); }},
+        {"SBC A,HLm", [this]() { SBC_A_HLm(); }},
         {"SBC A,A", [this]() { SBC_A_A(); }},
-        {"AND B", [this]() { AND_B(); }},
-        {"AND C", [this]() { AND_C(); }},
-        {"AND D", [this]() { AND_D(); }},
-        {"AND E", [this]() { AND_E(); }},
-        {"AND H", [this]() { AND_H(); }},
-        {"AND L", [this]() { AND_L(); }},
-        {"AND (HL)", [this]() { AND_HLm(); }},
-        {"AND A", [this]() { AND_A(); }},
-        {"XOR B", [this]() { XOR_B(); }},
-        {"XOR C", [this]() { XOR_C(); }},
-        {"XOR D", [this]() { XOR_D(); }},
-        {"XOR E", [this]() { XOR_E(); }},
-        {"XOR H", [this]() { XOR_H(); }},
-        {"XOR L", [this]() { XOR_L(); }},
-        {"XOR (HL)", [this]() { XOR_HLm(); }},
-        {"XOR A", [this]() { XOR_A(); }},
-        {"OR B", [this]() { OR_B(); }},
-        {"OR C", [this]() { OR_C(); }},
-        {"OR D", [this]() { OR_D(); }},
-        {"OR E", [this]() { OR_E(); }},
-        {"OR H", [this]() { OR_H(); }},
-        {"OR L", [this]() { OR_L(); }},
-        {"OR (HL)", [this]() { OR_HLm(); }},
-        {"OR A", [this]() { OR_A(); }},
-        {"CP B", [this]() { CP_B(); }},
-        {"CP C", [this]() { CP_C(); }},
-        {"CP D", [this]() { CP_D(); }},
-        {"CP E", [this]() { CP_E(); }},
-        {"CP H", [this]() { CP_H(); }},
-        {"CP L", [this]() { CP_L(); }},
-        {"CP (HL)", [this]() { CP_HLm(); }},
-        {"CP A", [this]() { CP_A(); }},
+        {"AND A,B", [this]() { AND_B(); }},
+        {"AND A,C", [this]() { AND_C(); }},
+        {"AND A,D", [this]() { AND_D(); }},
+        {"AND A,E", [this]() { AND_E(); }},
+        {"AND A,H", [this]() { AND_H(); }},
+        {"AND A,L", [this]() { AND_L(); }},
+        {"AND A,HLm", [this]() { AND_HLm(); }},
+        {"AND A,A", [this]() { AND_A(); }},
+        {"XOR A,B", [this]() { XOR_B(); }},
+        {"XOR A,C", [this]() { XOR_C(); }},
+        {"XOR A,D", [this]() { XOR_D(); }},
+        {"XOR A,E", [this]() { XOR_E(); }},
+        {"XOR A,H", [this]() { XOR_H(); }},
+        {"XOR A,L", [this]() { XOR_L(); }},
+        {"XOR A,HLm", [this]() { XOR_HLm(); }},
+        {"XOR A,A", [this]() { XOR_A(); }},
+        {"OR A,B", [this]() { OR_B(); }},
+        {"OR A,C", [this]() { OR_C(); }},
+        {"OR A,D", [this]() { OR_D(); }},
+        {"OR A,E", [this]() { OR_E(); }},
+        {"OR A,H", [this]() { OR_H(); }},
+        {"OR A,L", [this]() { OR_L(); }},
+        {"OR A,HLm", [this]() { OR_HLm(); }},
+        {"OR A,A", [this]() { OR_A(); }},
+        {"CP A,B", [this]() { CP_B(); }},
+        {"CP A,C", [this]() { CP_C(); }},
+        {"CP A,D", [this]() { CP_D(); }},
+        {"CP A,E", [this]() { CP_E(); }},
+        {"CP A,H", [this]() { CP_H(); }},
+        {"CP A,L", [this]() { CP_L(); }},
+        {"CP A,HLm", [this]() { CP_HLm(); }},
+        {"CP A,A", [this]() { CP_A(); }},
         {"RET NZ", [this]() { RET_NZ(); }},
         {"POP BC", [this]() { POP_BC(); }},
         {"JP NZ,a16", [this]() { JP_NZ_a16(); }},
@@ -400,52 +410,52 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
         {"CALL NZ,a16", [this]() { CALL_NZ_a16(); }},
         {"PUSH BC", [this]() { PUSH_BC(); }},
         {"ADD A,n8", [this]() { ADD_A_n8(); }},
-        {"RST 00H", [this]() { RST_00H(); }},
+        {"RST $00", [this]() { RST_00H(); }},
         {"RET Z", [this]() { RET_Z(); }},
         {"RET", [this]() { RET(); }},
         {"JP Z,a16", [this]() { JP_Z_a16(); }},
-        {"PREFIX CB", [this]() { PREFIX_CB(); }},
+        {"PREFIX", [this]() { PREFIX_CB(); }},
         {"CALL Z,a16", [this]() { CALL_Z_a16(); }},
         {"CALL a16", [this]() { CALL_a16(); }},
         {"ADC A,n8", [this]() { ADC_A_n8(); }},
-        {"RST 08H", [this]() { RST_08H(); }},
+        {"RST $08", [this]() { RST_08H(); }},
         {"RET NC", [this]() { RET_NC(); }},
         {"POP DE", [this]() { POP_DE(); }},
         {"JP NC,a16", [this]() { JP_NC_a16(); }},
         {"CALL NC,a16", [this]() { CALL_NC_a16(); }},
         {"PUSH DE", [this]() { PUSH_DE(); }},
-        {"SUB n8", [this]() { SUB_n8(); }},
-        {"RST 10H", [this]() { RST_10H(); }},
+        {"SUB A,n8", [this]() { SUB_n8(); }},
+        {"RST $10", [this]() { RST_10H(); }},
         {"RET C", [this]() { RET_C(); }},
         {"RETI", [this]() { RETI(); }},
         {"JP C,a16", [this]() { JP_C_a16(); }},
         {"CALL C,a16", [this]() { CALL_C_a16(); }},
         {"SBC A,n8", [this]() { SBC_A_n8(); }},
-        {"RST 18H", [this]() { RST_18H(); }},
+        {"RST $18", [this]() { RST_18H(); }},
         {"LDH a8,A", [this]() { LDH_a8_A(); }},
         {"POP HL", [this]() { POP_HL(); }},
         {"LDH C,A", [this]() { LDH_C_A(); }},
         {"PUSH HL", [this]() { PUSH_HL(); }},
-        {"AND n8", [this]() { AND_n8(); }},
-        {"RST 20H", [this]() { RST_20H(); }},
+        {"AND A,n8", [this]() { AND_n8(); }},
+        {"RST $20", [this]() { RST_20H(); }},
         {"ADD SP,e8", [this]() { ADD_SP_e8();}},
         {"JP HL", [this]() { JP_HL(); }},
-        {"LD (HL-),A", [this]() { LD_HLD_A(); }},
-        {"XOR n8", [this]() { XOR_n8(); }},
-        {"RST 28H", [this]() { RST_28H(); }},
+        {"LD a16,A", [this]() { LD_a16_A(); }},
+        {"XOR A,n8", [this]() { XOR_n8(); }},
+        {"RST $28", [this]() { RST_28H(); }},
         {"LDH A,a8", [this]() { LDH_A_a8(); }},
         {"POP AF", [this]() { POP_AF(); }},
-        {"LD A,(C)", [this]() { LDH_A_C(); }},
+        {"LDH A,C", [this]() { LDH_A_C(); }},
         {"DI", [this]() { DI(); }},
         {"PUSH AF", [this]() { PUSH_AF(); }},
-        {"OR n8", [this]() { OR_n8(); }},
-        {"RST 30H", [this]() { RST_30H(); }},
-        {"LD HL,SP+e8", [this]() { LD_HL_SP_e8(); }},
+        {"OR A,n8", [this]() { OR_n8(); }},
+        {"RST $30", [this]() { RST_30H(); }},
+        {"LD HL,SP+,e8", [this]() { LD_HL_SP_e8(); }},
         {"LD SP,HL", [this]() { LD_SP_HL(); }},
-        {"LD A,(a16)", [this]() { LD_A_a16(); }},
+        {"LD A,a16", [this]() { LD_A_a16(); }},
         {"EI", [this]() { EI(); }},
-        {"CP n8", [this]() { CP_n8(); }},
-        {"RST 38H", [this]() { RST_38H(); }},
+        {"CP A,n8", [this]() { CP_n8(); }},
+        {"RST $38", [this]() { RST_38H(); }},
 
         // CB-prefixed
         {"RLC B", [this]() { RLC_B(); }},
@@ -711,7 +721,9 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
     if (it != mnemonicToFunctionMapping.end()) {
         opcodeTable[opcode] = it->second;
     } else {
-        std::cerr << "Error: Unknown mnemonic " << mnemonic << std::endl;
+        if (mnemonic.find("ILLEGAL") == std::string::npos) {
+            std::cerr << "Error: Unknown mnemonic " << mnemonic << std::endl;
+        }
         opcodeTable[opcode] = [this]() { NOP(); };
     }
 }
@@ -728,12 +740,14 @@ void CPU::initializeOpcodes() {
 // Execute opcode
 void CPU::executeOpcode(u8 opcode) {
     // Call opcode function
+    std::cout << "Executing opcode " << std::hex << (int)opcode << std::endl;
     m_opcodeTable[opcode]();
 }
 
 // Execute CB opcode
 void CPU::executeCBOpcode(u8 opcode) {
     // Call CB opcode function
+    std::cout << "Executing CB opcode " << std::hex << (int)opcode << std::endl;
     m_cbOpcodeTable[opcode]();
 }
 
@@ -918,9 +932,8 @@ void CPU::RRCA() {
     m_cycles += 4;
 }
 
-void CPU::STOP() {
+void CPU::STOP_n8() {
     m_stopped = true;
-    readPC(); // Skip the next byte
     m_cycles += 4;
 }
 
@@ -1249,7 +1262,7 @@ void CPU::DEC_HLm() {
     m_cycles += 12;
 }
 
-void CPU::LD_HL_n8() {
+void CPU::LD_HLm_n8() {
     m_memory.write(m_registers.hl, readPC());
     m_cycles += 12;
 }
@@ -1844,7 +1857,7 @@ void CPU::ADC_A_A() {
     m_cycles += 4;
 }
 
-void CPU::SUB_B() {
+void CPU::SUB_A_B() {
     u8 result = m_registers.a - m_registers.b;
     
     setFlag(FLAG_Z, result == 0);
@@ -1856,7 +1869,7 @@ void CPU::SUB_B() {
     m_cycles += 4;
 }
 
-void CPU::SUB_C() {
+void CPU::SUB_A_C() {
     u8 result = m_registers.a - m_registers.c;
     
     setFlag(FLAG_Z, result == 0);
@@ -1868,7 +1881,7 @@ void CPU::SUB_C() {
     m_cycles += 4;
 }
 
-void CPU::SUB_D() {
+void CPU::SUB_A_D() {
     u8 result = m_registers.a - m_registers.d;
     
     setFlag(FLAG_Z, result == 0);
@@ -1880,7 +1893,7 @@ void CPU::SUB_D() {
     m_cycles += 4;
 }
 
-void CPU::SUB_E() {
+void CPU::SUB_A_E() {
     u8 result = m_registers.a - m_registers.e;
     
     setFlag(FLAG_Z, result == 0);
@@ -1892,7 +1905,7 @@ void CPU::SUB_E() {
     m_cycles += 4;
 }
 
-void CPU::SUB_H() {
+void CPU::SUB_A_H() {
     u8 result = m_registers.a - m_registers.h;
     
     setFlag(FLAG_Z, result == 0);
@@ -1904,7 +1917,7 @@ void CPU::SUB_H() {
     m_cycles += 4;
 }
 
-void CPU::SUB_L() {
+void CPU::SUB_A_L() {
     u8 result = m_registers.a - m_registers.l;
     
     setFlag(FLAG_Z, result == 0);
@@ -1916,7 +1929,7 @@ void CPU::SUB_L() {
     m_cycles += 4;
 }
 
-void CPU::SUB_HLm() {
+void CPU::SUB_A_HLm() {
     u8 value = m_memory.read(m_registers.hl);
     u8 result = m_registers.a - value;
     
@@ -1929,7 +1942,7 @@ void CPU::SUB_HLm() {
     m_cycles += 8;
 }
 
-void CPU::SUB_A() {
+void CPU::SUB_A_A() {
     setFlag(FLAG_Z, true);
     setFlag(FLAG_N, true);
     setFlag(FLAG_H, false);

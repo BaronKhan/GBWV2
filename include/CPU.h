@@ -135,7 +135,7 @@ private:
     void DEC_C();      // 0x0D
     void LD_C_n8();    // 0x0E
     void RRCA();       // 0x0F
-    void STOP();       // 0x10
+    void STOP_n8();       // 0x10
     void LD_DE_n16();  // 0x11
     void LD_DE_A();    // 0x12
     void INC_DE();     // 0x13
@@ -173,7 +173,7 @@ private:
     void INC_SP();     // 0x33
     void INC_HLm();    // 0x34
     void DEC_HLm();    // 0x35
-    void LD_HL_n8();   // 0x36
+    void LD_HLm_n8();   // 0x36
     void SCF();        // 0x37
     void JR_C_e8();    // 0x38
     void ADD_HL_SP();  // 0x39
@@ -263,14 +263,14 @@ private:
     void ADC_A_L();     // 0x8D
     void ADC_A_HLm();   // 0x8E
     void ADC_A_A();     // 0x8F
-    void SUB_B();       // 0x90
-    void SUB_C();       // 0x91
-    void SUB_D();       // 0x92
-    void SUB_E();       // 0x93
-    void SUB_H();       // 0x94
-    void SUB_L();       // 0x95
-    void SUB_HLm();     // 0x96
-    void SUB_A();       // 0x97
+    void SUB_A_B();       // 0x90
+    void SUB_A_C();       // 0x91
+    void SUB_A_D();       // 0x92
+    void SUB_A_E();       // 0x93
+    void SUB_A_H();       // 0x94
+    void SUB_A_L();       // 0x95
+    void SUB_A_HLm();     // 0x96
+    void SUB_A_A();       // 0x97
     void SBC_A_B();     // 0x98
     void SBC_A_C();     // 0x99
     void SBC_A_D();     // 0x9A
