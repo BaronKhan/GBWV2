@@ -2507,8 +2507,8 @@ void CPU::JP_Z_a16() {
 
 void CPU::PREFIX_CB() {
     u8 opcode = readPC();
-    executeCBOpcode(opcode);
     m_cycles += 4;
+    executeCBOpcode(opcode);
 }
 
 void CPU::CALL_Z_a16() {
