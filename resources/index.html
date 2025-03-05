@@ -64,6 +64,17 @@
             // Put the image data on the canvas
             ctx.putImageData(imageData, 0, 0);
         }
+
+        // Initialize image data with a random pattern for testing purposes
+        for (let i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
+            imageData.data[i * 4] = Math.floor(Math.random() * 256);     // R
+            imageData.data[i * 4 + 1] = Math.floor(Math.random() * 256); // G
+            imageData.data[i * 4 + 2] = Math.floor(Math.random() * 256); // B
+            imageData.data[i * 4 + 3] = 255;                             // A
+        }
+
+        // Put the image data on the canvas
+        ctx.putImageData(imageData, 0, 0);
         
         // Listen for messages from the C++ application
         window.chrome.webview.addEventListener('message', event => {
