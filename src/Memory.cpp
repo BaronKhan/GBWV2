@@ -167,19 +167,8 @@ void Memory::updatePPU(u32 cycles) {
     m_ppuCycles += cycles;
     
     // Calculate current scanline based on cycles
-    // We want to make sure we cycle through all scanlines, but spend more time at 0x90
-    // to ensure the boot ROM can detect it
-    u8 currentScanline;
-    
-    // Determine the scanline based on the cycle count
     u32 cycleInFrame = m_ppuCycles % (SCANLINE_CYCLES * SCANLINE_COUNT);
-    currentScanline = cycleInFrame / SCANLINE_CYCLES;
-    
-    // Ensure we spend enough time at scanline 0x90 for the boot ROM to detect it
-    // This is a hack to get past the boot ROM loop
-    if (currentScanline >= 0x90 && currentScanline < 0x98) {
-        currentScanline = 0x90;
-    }
+    u8 currentScanline = cycleInFrame / SCANLINE_CYCLES;
     
     // Update LY register (FF44)
     m_io[0x44] = currentScanline;
