@@ -729,12 +729,12 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
     
     auto it = mnemonicToFunctionMapping.find(mnemonic);
     if (it != mnemonicToFunctionMapping.end()) {
-        opcodeTable[opcode] = it->second;
+        opcodeTable[opcode] = {it->second, mnemonic};
     } else {
         if (mnemonic.find("ILLEGAL") == std::string::npos) {
             std::cerr << "Error: Unknown mnemonic " << mnemonic << std::endl;
         }
-        opcodeTable[opcode] = [this]() { NOP(); };
+        opcodeTable[opcode] = {[this]() { NOP(); }, "NOP"};
     }
 }
 
@@ -742,23 +742,25 @@ void CPU::mapOpcodeToFunction(u8 opcode, const std::string& mnemonic, bool isCB)
 void CPU::initializeOpcodes() {
     // Initialize opcode tables with NOP
     for (u16 i = 0; i < 256; i++) {
-        m_opcodeTable[i] = [this]() { NOP(); };
-        m_cbOpcodeTable[i] = [this]() { NOP(); };
+        m_opcodeTable[i] = {[this]() { NOP(); }, "NOP"};
+        m_cbOpcodeTable[i] = {[this]() { NOP(); }, "NOP"};
     }
 }
 
 // Execute opcode
 void CPU::executeOpcode(u8 opcode) {
     // Call opcode function
-    std::cout << "Executing opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 << std::endl;
-    m_opcodeTable[opcode]();
+    std::cout << "Executing opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
+              << " (" << m_opcodeTable[opcode].mnemonic << ")" << std::endl;
+    m_opcodeTable[opcode].function();
 }
 
 // Execute CB opcode
 void CPU::executeCBOpcode(u8 opcode) {
     // Call CB opcode function
-    std::cout << "Executing CB opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 << std::endl;
-    m_cbOpcodeTable[opcode]();
+    std::cout << "Executing CB opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
+              << " (" << m_cbOpcodeTable[opcode].mnemonic << ")" << std::endl;
+    m_cbOpcodeTable[opcode].function();
 }
 
 // Read from PC

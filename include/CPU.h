@@ -97,8 +97,14 @@ private:
 
     // Opcode tables
     using OpcodeFunction = std::function<void()>;
-    std::array<OpcodeFunction, 256> m_opcodeTable;
-    std::array<OpcodeFunction, 256> m_cbOpcodeTable;
+    
+    struct OpcodeEntry {
+        OpcodeFunction function;
+        std::string mnemonic;
+    };
+    
+    std::array<OpcodeEntry, 256> m_opcodeTable;
+    std::array<OpcodeEntry, 256> m_cbOpcodeTable;
 
     // Memory reference
     Memory& m_memory;
