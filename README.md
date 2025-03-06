@@ -4,7 +4,7 @@ A minimal GameBoy emulator written in C++20 for Windows.
 
 ## Features
 
-- Emulates the GameBoy CPU, GPU, and Memory
+- Emulates the GameBoy CPU, PPU, and Memory
 - Displays the GameBoy screen using WebView2
 - Supports loading GameBoy ROM files
 - Implements the basic instructions needed for the boot ROM

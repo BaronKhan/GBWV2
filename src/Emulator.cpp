@@ -5,7 +5,7 @@
 
 // Emulator constructor
 Emulator::Emulator() : m_initialized(false), m_paused(true), 
-                       m_cpu(CPU::getInstance()), m_gpu(GPU::getInstance()), m_memory(Memory::getInstance()) {
+                       m_cpu(CPU::getInstance()), m_memory(Memory::getInstance()) {
 }
 
 // Initialize emulator
@@ -78,7 +78,6 @@ void Emulator::reset() {
     
     // Reset components
     m_cpu.reset();
-    m_gpu.reset();
     m_memory.reset();
     
     // Reset emulator state
@@ -114,7 +113,7 @@ void Emulator::emulateFrame() {
     // Target 60 FPS (16.67 ms per frame)
     const u32 targetCycles = 70224; // Cycles per frame at 60 FPS
     
-    // Emulate CPU and GPU cycles
+    // Emulate CPU cycles
     u32 cycles = 0;
     while (cycles < targetCycles) {
         // Step CPU
@@ -123,9 +122,6 @@ void Emulator::emulateFrame() {
         // Get cycles elapsed
         u32 elapsed = m_cpu.getCycles() - cycles;
         cycles = m_cpu.getCycles();
-        
-        // Step GPU
-        m_gpu.step(elapsed);
     }
 }
 
@@ -274,18 +270,18 @@ void Emulator::sendScreenDataToWebView() {
         return;
     }
     
-    // Get screen buffer
-    const auto& screenBuffer = m_gpu.getScreenBuffer();
+    // Get screen buffer (TODO)
+    // const auto& screenBuffer = m_ppu.getScreenBuffer();
     
     // Create JSON message
     nlohmann::json message;
     message["type"] = "screenUpdate";
     message["pixels"] = nlohmann::json::array();
     
-    // Add pixel data
-    for (const auto& pixel : screenBuffer) {
-        message["pixels"].push_back(pixel);
-    }
+    // Add pixel data (TODO)
+    // for (const auto& pixel : screenBuffer) {
+    //     message["pixels"].push_back(pixel);
+    // }
     
     // Convert to string
     std::string messageStr = message.dump();

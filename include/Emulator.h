@@ -2,7 +2,6 @@
 
 #include "Common.h"
 #include "CPU.h"
-#include "GPU.h"
 #include "Memory.h"
 #include <WebView2.h>
 #include <wrl.h>
@@ -56,7 +55,6 @@ private:
     
     // References to other components
     CPU& m_cpu;
-    GPU& m_gpu;
     Memory& m_memory;
     
     // Emulation methods

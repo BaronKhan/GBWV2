@@ -1,5 +1,4 @@
 #include "Memory.h"
-#include "GPU.h"
 #include <fstream>
 #include <iostream>
 
@@ -39,12 +38,6 @@ u8 Memory::read(u16 address) const {
     
     // Video RAM (0x8000 - 0x9FFF)
     if (address < 0xA000) {
-        // Check if GPU is in PIXEL_TRANSFER mode
-        GPU& gpu = GPU::getInstance();
-        if (gpu.getMode() == GPU::Mode::PIXEL_TRANSFER) {
-            // VRAM is inaccessible during pixel transfer
-            return 0xFF;
-        }
         return m_vram[address - 0x8000];
     }
     
@@ -102,12 +95,6 @@ void Memory::write(u16 address, u8 value) {
     
     // Video RAM (0x8000 - 0x9FFF)
     if (address < 0xA000) {
-        // Check if GPU is in PIXEL_TRANSFER mode
-        GPU& gpu = GPU::getInstance();
-        if (gpu.getMode() == GPU::Mode::PIXEL_TRANSFER) {
-            // VRAM is inaccessible during pixel transfer
-            return;
-        }
         m_vram[address - 0x8000] = value;
         return;
     }
