@@ -41,6 +41,16 @@ void CPU::step() {
     // Fetch opcode
     u8 opcode = m_memory.read(m_registers.pc++);
     
+    // Debug output for boot ROM loop
+    // if (m_registers.pc >= 0x64 && m_registers.pc <= 0x6C) {
+    //     std::cout << "PC: 0x" << std::hex << (m_registers.pc - 1) 
+    //               << ", Opcode: 0x" << std::hex << static_cast<int>(opcode)
+    //               << ", A: 0x" << std::hex << static_cast<int>(m_registers.a)
+    //               << ", C: 0x" << std::hex << static_cast<int>(m_registers.c)
+    //               << ", LY: 0x" << std::hex << static_cast<int>(m_memory.read(0xFF44))
+    //               << std::endl;
+    // }
+    
     // Execute opcode
     executeOpcode(opcode);
     
@@ -750,16 +760,16 @@ void CPU::initializeOpcodes() {
 // Execute opcode
 void CPU::executeOpcode(u8 opcode) {
     // Call opcode function
-    std::cout << "Executing opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
-              << " (" << m_opcodeTable[opcode].mnemonic << ")" << std::endl;
+    // std::cout << "Executing opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
+    //           << " (" << m_opcodeTable[opcode].mnemonic << ")" << std::endl;
     m_opcodeTable[opcode].function();
 }
 
 // Execute CB opcode
 void CPU::executeCBOpcode(u8 opcode) {
     // Call CB opcode function
-    std::cout << "Executing CB opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
-              << " (" << m_cbOpcodeTable[opcode].mnemonic << ")" << std::endl;
+    // std::cout << "Executing CB opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
+    //           << " (" << m_cbOpcodeTable[opcode].mnemonic << ")" << std::endl;
     m_cbOpcodeTable[opcode].function();
 }
 

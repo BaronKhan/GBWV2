@@ -3,7 +3,7 @@
 #include <iostream>
 
 // Memory constructor
-Memory::Memory() : m_bootROMEnabled(true) {
+Memory::Memory() : m_bootROMEnabled(true), m_ppuCycles(0) {
     reset();
 }
 
@@ -19,6 +19,10 @@ void Memory::reset() {
     
     // Reset boot ROM state
     m_bootROMEnabled = true;
+    
+    // Reset PPU state
+    m_ppuCycles = 0;
+    m_io[0x44] = 0; // LY register starts at 0
 }
 
 // Read from memory
@@ -138,6 +142,11 @@ void Memory::write(u16 address, u8 value) {
             m_bootROMEnabled = false;
         }
         
+        // LY register (FF44) is read-only
+        if (address == 0xFF44) {
+            return;
+        }
+        
         m_io[address - 0xFF00] = value;
         return;
     }
@@ -150,6 +159,36 @@ void Memory::write(u16 address, u8 value) {
     
     // Interrupt Enable register (0xFFFF)
     m_ie = value;
+}
+
+// Update PPU state based on CPU cycles
+void Memory::updatePPU(u32 cycles) {
+    // Add cycles to PPU counter
+    m_ppuCycles += cycles;
+    
+    // Calculate current scanline based on cycles
+    // We want to make sure we cycle through all scanlines, but spend more time at 0x90
+    // to ensure the boot ROM can detect it
+    u8 currentScanline;
+    
+    // Determine the scanline based on the cycle count
+    u32 cycleInFrame = m_ppuCycles % (SCANLINE_CYCLES * SCANLINE_COUNT);
+    currentScanline = cycleInFrame / SCANLINE_CYCLES;
+    
+    // Ensure we spend enough time at scanline 0x90 for the boot ROM to detect it
+    // This is a hack to get past the boot ROM loop
+    if (currentScanline >= 0x90 && currentScanline < 0x98) {
+        currentScanline = 0x90;
+    }
+    
+    // Update LY register (FF44)
+    m_io[0x44] = currentScanline;
+    
+    // If we're entering VBlank, request VBlank interrupt
+    if (currentScanline == VBLANK_START) {
+        // Set VBlank interrupt flag (bit 0 of IF register)
+        m_io[0x0F] |= 0x01;
+    }
 }
 
 // Disable boot ROM

@@ -31,6 +31,9 @@ public:
 
     // Reset memory
     void reset();
+    
+    // PPU timing
+    void updatePPU(u32 cycles);
 
 private:
     // Private constructor for singleton
@@ -47,6 +50,14 @@ private:
 
     // Boot ROM control
     bool m_bootROMEnabled;
+    
+    // PPU state
+    u32 m_ppuCycles;                      // PPU cycle counter
+    
+    // PPU constants
+    static constexpr u32 SCANLINE_CYCLES = 456;  // Cycles per scanline
+    static constexpr u8 SCANLINE_COUNT = 154;    // Total scanlines (0-153)
+    static constexpr u8 VBLANK_START = 144;      // Start of VBlank period
 };
 
 // Cartridge class (ROM + RAM)

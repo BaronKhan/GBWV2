@@ -116,12 +116,18 @@ void Emulator::emulateFrame() {
     // Emulate CPU cycles
     u32 cycles = 0;
     while (cycles < targetCycles) {
+        // Get current cycles
+        u32 currentCycles = m_cpu.getCycles();
+        
         // Step CPU
         m_cpu.step();
         
         // Get cycles elapsed
-        u32 elapsed = m_cpu.getCycles() - cycles;
-        cycles = m_cpu.getCycles();
+        u32 elapsed = m_cpu.getCycles() - currentCycles;
+        cycles += elapsed;
+        
+        // Update PPU
+        m_memory.updatePPU(elapsed);
     }
 }
 
