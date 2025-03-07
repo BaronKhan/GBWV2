@@ -2,6 +2,10 @@
 
 An in-progress GameBoy emulator written in C++20 for Windows using AI, rendering in a WebView2.
 
+![Boot logo](.assets/GameBoyEmulatorBootScreen.gif)
+
+![Tetris copyright screen](.assets/GameBoyEmulatorTetrisCopyrightScreen.png)
+
 ## Features
 
 - Emulates the GameBoy CPU, PPU, and Memory
