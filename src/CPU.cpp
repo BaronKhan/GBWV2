@@ -46,22 +46,22 @@ void CPU::step() {
     // Debug output
     if (currentPC >= 0x69 && currentPC <= 0x6E) {
         const auto LY = m_memory.read(0xFF44);
-        std::cout << "PC: 0x" << std::hex << (m_registers.pc - 1) 
-                  << ", Opcode: 0x" << std::hex << static_cast<int>(opcode)
-                  << ", A: 0x" << std::hex << static_cast<int>(m_registers.a)
-                  << ", C: 0x" << std::hex << static_cast<int>(m_registers.c)
-                  << ", LY: 0x" << std::hex << static_cast<int>(LY)
-                  << ", " << m_opcodeTable[opcode].mnemonic
-                  << std::endl;
+        // std::cout << "PC: 0x" << std::hex << (m_registers.pc - 1) 
+        //           << ", Opcode: 0x" << std::hex << static_cast<int>(opcode)
+        //           << ", A: 0x" << std::hex << static_cast<int>(m_registers.a)
+        //           << ", C: 0x" << std::hex << static_cast<int>(m_registers.c)
+        //           << ", LY: 0x" << std::hex << static_cast<int>(LY)
+        //           << ", " << m_opcodeTable[opcode].mnemonic
+        //           << std::endl;
     }
 
     if (currentPC >= 0x2700 && currentPC <= 0x27FF) {
-        std::cout << "PC: 0x" << std::hex << (currentPC) 
-                  << ", Opcode: 0x" << std::hex << static_cast<int>(opcode)
-                  << ", A: 0x" << std::hex << static_cast<int>(m_registers.a)
-                  << ", B: 0x" << std::hex << static_cast<int>(m_registers.b)
-                  << ", " << m_opcodeTable[opcode].mnemonic
-                  << std::endl;
+        // std::cout << "PC: 0x" << std::hex << (currentPC) 
+        //           << ", Opcode: 0x" << std::hex << static_cast<int>(opcode)
+        //           << ", A: 0x" << std::hex << static_cast<int>(m_registers.a)
+        //           << ", B: 0x" << std::hex << static_cast<int>(m_registers.b)
+        //           << ", " << m_opcodeTable[opcode].mnemonic
+        //           << std::endl;
     }
     
     // Execute opcode
@@ -773,20 +773,20 @@ void CPU::initializeOpcodes() {
 // Execute opcode
 void CPU::executeOpcode(u8 opcode) {
     // Call opcode function
-    if (m_registers.pc > 0x80) {
-        std::cout << "Executing opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
-                << " (" << m_opcodeTable[opcode].mnemonic << ")" << std::endl;
-    }
+    // if (m_registers.pc > 0x80) {
+    //     std::cout << "Executing opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
+    //             << " (" << m_opcodeTable[opcode].mnemonic << ")" << std::endl;
+    // }
     m_opcodeTable[opcode].function();
 }
 
 // Execute CB opcode
 void CPU::executeCBOpcode(u8 opcode) {
     // Call CB opcode function
-    if (m_registers.pc > 0x80) {
-        std::cout << "Executing CB opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
-                << " (" << m_cbOpcodeTable[opcode].mnemonic << ")" << std::endl;
-    }
+    // if (m_registers.pc > 0x80) {
+    //     std::cout << "Executing CB opcode 0x" << std::hex << (int)opcode << " at PC 0x" << m_registers.pc - 1 
+    //             << " (" << m_cbOpcodeTable[opcode].mnemonic << ")" << std::endl;
+    // }
     m_cbOpcodeTable[opcode].function();
 }
 
@@ -878,8 +878,8 @@ void CPU::DEC_B() {
     setFlag(FLAG_N, true);
     setFlag(FLAG_H, (m_registers.b & 0x0F) == 0x00);
     
-    std::cout << "DEC B: B=" << (int)m_registers.b << "->" << (int)result 
-              << " Z=" << getFlag(FLAG_Z) << std::endl;
+    // std::cout << "DEC B: B=" << (int)m_registers.b << "->" << (int)result 
+    //           << " Z=" << getFlag(FLAG_Z) << std::endl;
     
     m_registers.b = result;
     m_cycles += 4;
@@ -931,11 +931,11 @@ void CPU::LD_A_BC() {
 }
 
 void CPU::DEC_BC() {
-    std::cout << "DEC_BC: Before BC=0x" << std::hex << m_registers.bc 
-              << " (B=0x" << (int)m_registers.b << ", C=0x" << (int)m_registers.c << ")" << std::endl;
+    // std::cout << "DEC_BC: Before BC=0x" << std::hex << m_registers.bc 
+    //           << " (B=0x" << (int)m_registers.b << ", C=0x" << (int)m_registers.c << ")" << std::endl;
     m_registers.bc--;
-    std::cout << "DEC_BC: After  BC=0x" << std::hex << m_registers.bc 
-              << " (B=0x" << (int)m_registers.b << ", C=0x" << (int)m_registers.c << ")" << std::endl;
+    // std::cout << "DEC_BC: After  BC=0x" << std::hex << m_registers.bc 
+    //           << " (B=0x" << (int)m_registers.b << ", C=0x" << (int)m_registers.c << ")" << std::endl;
     m_cycles += 8;
 }
 
@@ -1274,13 +1274,13 @@ void CPU::LD_SP_n16() {
 }
 
 void CPU::LD_HLD_A() {
-    std::cout << "LD (HL-),A: HL=" << std::hex << m_registers.hl 
-              << " A=" << (int)m_registers.a << std::endl;
+    // std::cout << "LD (HL-),A: HL=" << std::hex << m_registers.hl 
+    //           << " A=" << (int)m_registers.a << std::endl;
     
     m_memory.write(m_registers.hl, m_registers.a);
     m_registers.hl--;
     
-    std::cout << "After: HL=" << std::hex << m_registers.hl << std::endl;
+    // std::cout << "After: HL=" << std::hex << m_registers.hl << std::endl;
     
     m_cycles += 8;
 }
