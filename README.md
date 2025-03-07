@@ -1,6 +1,6 @@
 # GameBoy Emulator
 
-A minimal GameBoy emulator written in C++20 for Windows.
+An in-progress GameBoy emulator written in C++20 for Windows using AI, rendering in a WebView2.
 
 ## Features
 
@@ -9,6 +9,7 @@ A minimal GameBoy emulator written in C++20 for Windows.
 - Supports loading GameBoy ROM files
 - Implements the basic instructions needed for the boot ROM
 - Supports MBC1 ROM bank switching
+- Only Loads GameBoy boot room and can display Tetris copyright screen.
 
 ## Requirements
 
