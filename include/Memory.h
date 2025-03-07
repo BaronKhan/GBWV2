@@ -4,6 +4,7 @@
 
 // Forward declarations
 class Cartridge;
+class PPU;
 
 // Memory Management Unit (MMU) class
 class Memory {
@@ -32,8 +33,11 @@ public:
     // Reset memory
     void reset();
     
-    // PPU timing
+    // PPU timing (kept for compatibility)
     void updatePPU(u32 cycles);
+
+    // Friend class
+    friend class PPU;
 
 private:
     // Private constructor for singleton
@@ -51,7 +55,7 @@ private:
     // Boot ROM control
     bool m_bootROMEnabled;
     
-    // PPU state
+    // PPU state (kept for compatibility)
     u32 m_ppuCycles;                      // PPU cycle counter
     
     // PPU constants

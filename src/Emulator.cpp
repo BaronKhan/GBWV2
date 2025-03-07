@@ -5,7 +5,8 @@
 
 // Emulator constructor
 Emulator::Emulator() : m_initialized(false), m_paused(true), 
-                       m_cpu(CPU::getInstance()), m_memory(Memory::getInstance()) {
+                       m_cpu(CPU::getInstance()), m_memory(Memory::getInstance()),
+                       m_ppu(PPU::getInstance()) {
 }
 
 // Initialize emulator
@@ -20,6 +21,9 @@ bool Emulator::initialize(HWND hwnd) {
     if (!initializeWebView2()) {
         return false;
     }
+    
+    // Initialize PPU
+    m_ppu.initialize();
     
     m_initialized = true;
     return true;
@@ -79,6 +83,7 @@ void Emulator::reset() {
     // Reset components
     m_cpu.reset();
     m_memory.reset();
+    m_ppu.reset();
     
     // Reset emulator state
     m_paused = true;
@@ -127,6 +132,9 @@ void Emulator::emulateFrame() {
         cycles += elapsed;
         
         // Update PPU
+        m_ppu.update(elapsed);
+        
+        // Also update the PPU in Memory for compatibility
         m_memory.updatePPU(elapsed);
     }
 }
@@ -276,18 +284,18 @@ void Emulator::sendScreenDataToWebView() {
         return;
     }
     
-    // Get screen buffer (TODO)
-    // const auto& screenBuffer = m_ppu.getScreenBuffer();
+    // Get screen buffer from PPU
+    const auto& screenBuffer = m_ppu.getScreenBuffer();
     
     // Create JSON message
     nlohmann::json message;
     message["type"] = "screenUpdate";
     message["pixels"] = nlohmann::json::array();
     
-    // Add pixel data (TODO)
-    // for (const auto& pixel : screenBuffer) {
-    //     message["pixels"].push_back(pixel);
-    // }
+    // Add pixel data
+    for (const auto& pixel : screenBuffer) {
+        message["pixels"].push_back(pixel);
+    }
     
     // Convert to string
     std::string messageStr = message.dump();

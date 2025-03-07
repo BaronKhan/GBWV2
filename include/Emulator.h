@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "CPU.h"
 #include "Memory.h"
+#include "PPU.h"
 #include <WebView2.h>
 #include <wrl.h>
 #include <windows.h>
@@ -56,6 +57,7 @@ private:
     // References to other components
     CPU& m_cpu;
     Memory& m_memory;
+    PPU& m_ppu;
     
     // Emulation methods
     void emulateFrame();
