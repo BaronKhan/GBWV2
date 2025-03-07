@@ -111,6 +111,10 @@ bool MainWindow::create(HINSTANCE hInstance, int nCmdShow) {
 int MainWindow::messageLoop() {
     MSG msg = {};
     
+    // Target 60 FPS (16.67 ms per frame)
+    const auto targetFrameTime = std::chrono::microseconds(16667);
+    auto lastFrameTime = std::chrono::high_resolution_clock::now();
+    
     // Main message loop
     while (true) {
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -121,7 +125,22 @@ int MainWindow::messageLoop() {
             DispatchMessage(&msg);
         }
 
-        Emulator::getInstance().run();
+        // Get current time
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - lastFrameTime);
+        
+        // If enough time has passed, run a frame
+        if (elapsedTime >= targetFrameTime) {
+            Emulator::getInstance().run();
+            lastFrameTime = currentTime;
+        }
+        else {
+            // Sleep to avoid maxing out CPU
+            auto sleepTime = targetFrameTime - elapsedTime;
+            if (sleepTime > std::chrono::microseconds(1000)) {
+                Sleep(static_cast<DWORD>(sleepTime.count() / 1000));
+            }
+        }
     }
     
     return (int)msg.wParam;

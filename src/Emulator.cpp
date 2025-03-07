@@ -287,15 +287,13 @@ void Emulator::sendScreenDataToWebView() {
     // Get screen buffer from PPU
     const auto& screenBuffer = m_ppu.getScreenBuffer();
     
-    // Create JSON message
+    // Create JSON message with more efficient format
     nlohmann::json message;
     message["type"] = "screenUpdate";
-    message["pixels"] = nlohmann::json::array();
     
-    // Add pixel data
-    for (const auto& pixel : screenBuffer) {
-        message["pixels"].push_back(pixel);
-    }
+    // Instead of sending each pixel individually, send a flat array
+    // This significantly reduces JSON overhead
+    message["pixels"] = screenBuffer;
     
     // Convert to string
     std::string messageStr = message.dump();
